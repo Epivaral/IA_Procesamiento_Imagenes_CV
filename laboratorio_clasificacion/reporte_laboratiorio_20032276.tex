@@ -1,0 +1,126 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.8cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\shorthandoff{<>}
+\usepackage{amsmath,booktabs,array}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\begin{center}
+{\LARGE Reporte de laboratorio: clasificación tabular con MLP}\\[0.4em]
+Carnet: 20032276\hfill Fecha: 16 de agosto de 2026\\
+Archivo entregado: \texttt{laboratorio\_estudiante\_20032276.ipynb}
+\end{center}
+
+\textbf{Propósito.} Se comparó un MLP convencional con un MLP residual con Batch Normalization para clasificar datos tabulares. La selección se realizó únicamente con el conjunto de desarrollo, manteniendo el conjunto privado fuera de este proceso.
+
+\section*{1. Datos, división y control de fuga}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Elemento & Valor & Evidencia o justificación & Estado\\
+\midrule
+Archivo público & train\_1000\_desbalanceado.csv & 1,000 ejemplos & Usado\\
+División & 800 train / 200 dev & Estratificada, semilla 17 & Usado\\
+Clases en train & 600 clase 0 / 200 clase 1 & Proporción positiva: 0.25 & Verificado\\
+Estandarización & Media y desviación de train & Ajustada sólo con $x_{train}$ & Sin fuga\\
+Test privado & No usado durante selección & Reservado para evaluación final & No usado\\
+\bottomrule
+\end{tabular}
+
+\vspace{0.6em}
+\textbf{Control de fuga.} Una fuente de fuga sería calcular la media y la desviación estándar usando los 1,000 ejemplos antes de dividir los datos. Eso permitiría que la información del conjunto de desarrollo influyera en el entrenamiento. Se evitó ajustando el estandarizador solamente con \texttt{x[indice\_train]} y aplicando después esos mismos parámetros a train y dev.
+
+\section*{2. Estrategia ante el desbalance}
+\begin{tabular}{@{}p{3.0cm}p{4.0cm}p{6.7cm}@{}}
+\toprule
+Decisión & Valor elegido & Justificación\\
+\midrule
+Pérdida & BCE ponderada; peso positivo $=3.0$ & Se calcula como $600/200$. Cada positivo recibe peso 3 para compensar que hay tres negativos por cada positivo.\\
+Selección de modelo & Costo esperado en dev & Se usó costo de falso negativo $=10$ y falso positivo $=1$. No detectar un positivo se considera diez veces más grave.\\
+Métricas reportadas & Accuracy, precision, recall, F1 y especificidad & Accuracy sola puede ser alta al acertar mayormente negativos, aunque se fallen positivos.\\
+Umbral & Seleccionado sólo en dev & Se congela el umbral antes de cualquier evaluación privada.\\
+\bottomrule
+\end{tabular}
+
+\vspace{0.6em}
+El umbral 0.5 no tiene por qué ser óptimo: supone implícitamente una decisión simétrica. Como el falso negativo es más costoso, se eligió el umbral que minimiza $10\,FN + 1\,FP$ en desarrollo.
+
+\section*{3. Búsqueda de hiperparámetros}
+\small
+\begin{tabular}{@{}clccccccc@{}}
+\toprule
+ID & Arquitectura & Capas/ancho & LR & Épocas & Costo dev & F1 & Recall & Umbral\\
+\midrule
+A & MLP & [32, 16] & 0.002 & 120 & 39 & 0.887 & 0.940 & 0.39\\
+B & Residual + BN & 32 & 0.002 & 120 & 60 & 0.857 & 0.900 & 0.10\\
+\bottomrule
+\end{tabular}
+\normalsize
+
+\vspace{0.5em}
+\textbf{Decisión.} Se eligió el modelo A (MLP) porque obtuvo el menor costo operacional en desarrollo: 39 frente a 60. La regla de desempate definida sería mayor F1 y, si persistiera el empate, mayor recall. El notebook ejecutado contiene dos configuraciones; por ello se reportan sólo esas dos y no se inventan resultados adicionales.
+
+\section*{4. Curvas de entrenamiento y desarrollo}
+\begin{center}
+\begin{tikzpicture}[x=.055cm,y=10cm]
+  \draw (0,0) -- (125,0) node[right]{Época};
+  \draw (0,0) -- (0,.68) node[above]{Pérdida};
+  \foreach \x in {20,40,60,80,100,120} \draw (\x,0) -- (\x,-.015) node[below,font=\scriptsize]{\x};
+  \foreach \y/\t in {.2/.2,.4/.4,.6/.6} \draw (0,\y) -- (-1,\y) node[left,font=\scriptsize]{\t};
+  \draw[blue,thick] plot coordinates {(1,.614)(20,.235)(40,.180)(60,.155)(80,.137)(100,.125)(120,.114)};
+  \draw[red,thick,dashed] plot coordinates {(1,.623)(20,.241)(40,.190)(60,.179)(80,.183)(100,.187)(120,.199)};
+  \node[blue] at (105,.12) {\scriptsize train};
+  \node[red] at (109,.22) {\scriptsize dev};
+\end{tikzpicture}
+\end{center}
+
+La pérdida de entrenamiento disminuyó de 0.614 a 0.114. La pérdida de desarrollo alcanzó su mínimo de 0.178 en la época 64 y terminó en 0.199. Esto sugiere un sobreajuste leve después de aproximadamente la época 64. El modelo guardado corresponde al entrenamiento de 120 épocas, pues el procedimiento del notebook no guarda checkpoints intermedios.
+
+\section*{5. Selección de umbral y reporte de métricas}
+\begin{center}
+\begin{tikzpicture}[x=10cm,y=.045cm]
+  \draw (0,0) -- (1.05,0) node[right]{Umbral};
+  \draw (0,0) -- (0,118) node[above]{Costo dev};
+  \foreach \x in {.1,.3,.5,.7,.9} \draw (\x,0) -- (\x,-3) node[below,font=\scriptsize]{\x};
+  \draw[red,thick] plot coordinates {(.05,60)(.10,57)(.20,49)(.30,44)(.39,39)(.40,49)(.50,45)(.60,44)(.70,74)(.80,73)(.90,101)(.95,110)};
+  \draw[dashed] (.39,0)--(.39,39);
+  \node[below] at (.39,0) {\scriptsize 0.39};
+\end{tikzpicture}
+\end{center}
+
+\begin{center}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+Conjunto & Accuracy & Precision & Recall & F1 & Especificidad\\
+\midrule
+Desarrollo, umbral 0.39 & 0.940 & 0.839 & 0.940 & 0.887 & 0.940\\
+Test privado, umbral congelado & No evaluado & No evaluado & No evaluado & No evaluado & No evaluado\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Matriz de confusión en desarrollo.}
+\[
+\begin{array}{c|cc}
+ & \text{Pred. 0} & \text{Pred. 1}\\ \hline
+\text{Real 0} & 141 & 9\\
+\text{Real 1} & 3 & 47
+\end{array}
+\]
+
+Con el umbral 0.39 se obtuvieron $TP=47$, $FP=9$, $FN=3$ y $TN=141$; por tanto, el costo es $10(3)+1(9)=39$.
+
+\section*{6. Conclusión reproducible}
+\begin{enumerate}
+\item Arquitectura final: MLP con capas ocultas [32, 16], entrenado por 120 épocas con tasa de aprendizaje 0.002 y peso positivo 3.0. Artefacto: \texttt{entrega/modelo\_elegido.npz}.
+\item Umbral congelado: 0.39. Costos asumidos: falso negativo 10 y falso positivo 1.
+\item Antes de desplegar, evaluaría una búsqueda con más configuraciones y aplicaría el modelo una sola vez al test privado o a nuevos datos representativos.
+\end{enumerate}
+
+\end{document}

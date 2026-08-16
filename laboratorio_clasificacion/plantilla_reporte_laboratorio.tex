@@ -1,0 +1,144 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1.8cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\shorthandoff{<>}
+\usepackage{amsmath,booktabs,array}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\setlength{\parindent}{0pt}
+\newcommand{\campo}[1]{\underline{\hspace{#1}}}
+\begin{document}
+
+\begin{center}
+{\LARGE Reporte de laboratorio: clasificación tabular con MLP}\\[0.4em]
+Nombre: \campo{6cm}\hfill Fecha: \campo{3cm}\\
+Repositorio o archivo entregado: \campo{10cm}
+\end{center}
+
+\textbf{Propósito.} Documentar una comparación reproducible entre un MLP convencional y un MLP residual con Batch Normalization, usando una división estratificada 800/200 y un conjunto de entrenamiento desbalanceado. Los valores mostrados como ejemplo son ficticios y deben sustituirse por resultados propios.
+
+\section*{1. Datos, división y control de fuga}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Elemento & Valor & Evidencia o justificación & Estado\\
+\midrule
+Archivo público & train\_1000\_desbalanceado.csv & 1,000 ejemplos & Ejemplo\\
+División & 800 train / 200 dev & Estratificada, semilla 31 & Ejemplo\\
+Clases en train & 600 clase 0 / 200 clase 1 & Proporción conservada & Ejemplo\\
+Estandarización & Media y desviación de train & Sin usar dev ni test & Ejemplo\\
+Test privado & No usado durante selección & Sólo evaluación final & Ejemplo\\
+\bottomrule
+\end{tabular}
+
+\vspace{0.7em}
+\textbf{Respuesta.} Describa una fuente posible de fuga de información y cómo la evitó:
+
+\vspace{2.0cm}
+
+\section*{2. Estrategia ante el desbalance}
+\begin{tabular}{@{}p{3.1cm}p{5.4cm}p{5.3cm}@{}}
+\toprule
+Decisión & Valor elegido & Justificación\\
+\midrule
+Pérdida & BCE ponderada; peso positivo = 3.0 & Compensa la relación 600/200 de train.\\
+Selección de modelo & Costo esperado en dev & Falso negativo cuesta 5; falso positivo cuesta 1.\\
+Métricas reportadas & Precision, recall, F1, especificidad y accuracy & Accuracy sola oculta el desempeño de la clase minoritaria.\\
+Umbral & Se elige sólo en dev & Se congela antes del test privado.\\
+\bottomrule
+\end{tabular}
+
+\vspace{0.6em}
+\textbf{Respuesta.} Declare los costos y explique por qué el umbral 0.5 puede no ser adecuado:
+
+\vspace{1.5cm}
+
+\section*{3. Búsqueda de hiperparámetros}
+\small
+\begin{tabular}{@{}lcccccccc@{}}
+\toprule
+ID & Arquitectura & Capas/ancho & LR & Épocas & Costo dev & F1 dev & Recall dev & Umbral\\
+\midrule
+A & MLP & [24,16] & 0.003 & 100 & 43 & 0.81 & 0.90 & 0.41\\
+B & MLP & [48,24] & 0.002 & 100 & 38 & 0.84 & 0.88 & 0.38\\
+C & Residual + BN & 24 & 0.002 & 100 & 46 & 0.79 & 0.92 & 0.35\\
+D & Residual + BN & 40 & 0.0015 & 100 & 41 & 0.82 & 0.90 & 0.40\\
+\bottomrule
+\end{tabular}
+\normalsize
+
+\vspace{0.5em}
+\textbf{Decisión del ejemplo.} Se elige B por costo mínimo en desarrollo. Documente su regla de desempate y su modelo elegido:
+
+\vspace{1.5cm}
+
+\section*{4. Curvas de entrenamiento y desarrollo}
+\begin{center}
+\begin{tikzpicture}[x=0.85cm,y=3.2cm]
+  \draw (0,0) -- (7.5,0) node[right]{Época};
+  \draw (0,0) -- (0,1.25) node[above]{Pérdida};
+  \foreach \x/\e in {1/20,2/40,3/60,4/80,5/100,6/120,7/140} \draw (\x,0) -- (\x,-.03) node[below,font=\scriptsize]{\e};
+  \foreach \y/\e in {.25/.25,.5/.50,.75/.75,1/1.00} \draw (0,\y) -- (-.05,\y) node[left,font=\scriptsize]{\e};
+  \draw[blue,thick] plot coordinates {(0,.95)(1,.61)(2,.43)(3,.31)(4,.25)(5,.21)(6,.18)(7,.16)};
+  \draw[red,thick,dashed] plot coordinates {(0,.98)(1,.66)(2,.49)(3,.39)(4,.35)(5,.34)(6,.35)(7,.37)};
+  \node[blue] at (5.9,.24) {\scriptsize train};
+  \node[red] at (6.3,.43) {\scriptsize dev};
+\end{tikzpicture}
+\hspace{1cm}
+\begin{tikzpicture}[x=0.85cm,y=3.2cm]
+  \draw (0,0) -- (7.5,0) node[right]{Época};
+  \draw (0,0) -- (0,1.25) node[above]{Métrica};
+  \foreach \x/\e in {1/20,2/40,3/60,4/80,5/100,6/120,7/140} \draw (\x,0) -- (\x,-.03) node[below,font=\scriptsize]{\e};
+  \foreach \y/\e in {.25/.25,.5/.50,.75/.75,1/1.00} \draw (0,\y) -- (-.05,\y) node[left,font=\scriptsize]{\e};
+  \draw[blue,thick] plot coordinates {(0,.58)(1,.70)(2,.77)(3,.82)(4,.85)(5,.86)(6,.85)(7,.84)};
+  \draw[green!60!black,thick,dashed] plot coordinates {(0,.42)(1,.60)(2,.71)(3,.78)(4,.82)(5,.84)(6,.83)(7,.82)};
+  \node[blue] at (5.8,.93) {\scriptsize accuracy dev};
+  \node[green!60!black] at (5.4,.74) {\scriptsize F1 dev};
+\end{tikzpicture}
+\end{center}
+
+\textbf{Interpretación.} Indique la época o checkpoint seleccionado y explique si observa sobreajuste, subajuste o estabilidad:
+
+\vspace{1.4cm}
+
+\section*{5. Selección de umbral y reporte de métricas}
+\begin{center}
+\begin{tikzpicture}[x=8cm,y=.07cm]
+  \draw (0,0) -- (1.08,0) node[right]{Umbral};
+  \draw (0,0) -- (0,52) node[above]{Costo dev};
+  \draw[gray] (.1,0)--(.1,50) (.3,0)--(.3,50) (.5,0)--(.5,50) (.7,0)--(.7,50) (.9,0)--(.9,50);
+  \draw[red,thick] plot coordinates {(.05,49)(.15,38)(.25,29)(.35,21)(.40,18)(.45,20)(.55,27)(.65,39)(.75,48)(.85,51)};
+  \draw[dashed] (.40,0)--(.40,18);
+  \node[below] at (.40,0) {\scriptsize 0.40};
+\end{tikzpicture}
+\end{center}
+
+\begin{center}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+Conjunto & Accuracy & Precision & Recall & F1 & Especificidad\\
+\midrule
+Desarrollo, umbral 0.40 & 0.91 & 0.78 & 0.92 & 0.84 & 0.90\\
+Test privado, umbral congelado & \campo{1cm} & \campo{1cm} & \campo{1cm} & \campo{1cm} & \campo{1cm}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Matriz de confusión en desarrollo (ejemplo ficticio).}
+\[
+\begin{array}{c|cc}
+ & \text{Pred. 0} & \text{Pred. 1}\\ \hline
+\text{Real 0} & 135 & 15\\
+\text{Real 1} & 4 & 46
+\end{array}
+\]
+
+\section*{6. Conclusión reproducible}
+\begin{enumerate}
+\item Arquitectura final, pesos y ruta del artefacto: \campo{10cm}
+\item Umbral congelado y costos asumidos: \campo{10cm}
+\item Cambio que haría antes de desplegar: \campo{10cm}
+\end{enumerate}
+\end{document}

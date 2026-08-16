@@ -1,5 +1,11 @@
 # Laboratorio: clasificación tabular con MLP
 
+
+## Eduardo Pivaral Leal  - 20032276
+
+## entregables: laboratorio_estudiante_20032276.ipynb y Reporte_laboratorio_20032276.pdf
+
+
 El laboratorio está en español y distingue claramente los materiales públicos de los privados.
 
 - datos_publicos contiene el único conjunto de entrenamiento que se entrega: 1,000 ejemplos, 750 de clase 0 y 250 de clase 1.

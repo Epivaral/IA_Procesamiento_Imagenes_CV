@@ -1,9 +1,0 @@
-export type Model = 'vae' | 'gan';
-export interface Metrics { feature_mmd: number; entropy: number; coverage: number; digit_counts: number[]; sample_count: number; }
-export interface Epoch { epoch: number; step: number; examples_seen: number; training_seconds: number; evaluation_seconds: number; losses: Record<string, number> | null; metrics: Metrics; image: string; reconstruction: string | null; }
-export interface Final extends Metrics { training_seconds: number; evaluation_seconds: number; generation_ms_per_image: number; generation_batch_ms: number; generation_batch_ms_std: number; generation_batch_size: number; }
-export interface Run { schema_version: number; id: string; model: Model; seed: number; status: string; environment: Record<string, string | number>; config: { epochs: number; train_count: number; batch_size: number; latent_dim: number; learning_rate: number; betas: number[]; parameters: number; discriminator_parameters: number; source_sha256: string; evaluator_sha256: string; }; epochs: Epoch[]; steps: { step: number; epoch: number; losses: Record<string, number> }[]; final: Final | null; }
-export interface Summary { mean: number | null; std: number | null; n: number; }
-export interface Manifest { schema_version: number; runs: { id: string; model: Model; seed: number; status: string; path: string }[]; aggregate: Record<Model, Record<string, Summary>>; evaluator: { test_accuracy: number; history: { epoch: number; validation_accuracy: number; seconds: number }[]; checkpoint_sha256: string }; protocol: Record<string, unknown>; }
-export interface CodeBlock { id: string; title: string; explanation: string; formula: string; flow: string[]; code: string; file: string; start_line: number; }
-export interface Series { label: string; color: string; points: { x: number; y: number }[]; }

@@ -1,0 +1,345 @@
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage[margin=0.85in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{booktabs,tabularx,array}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{float}
+
+\definecolor{navy}{HTML}{17324D}
+\definecolor{teal}{HTML}{147D7E}
+\definecolor{gold}{HTML}{D49A2A}
+\definecolor{lightgold}{HTML}{FFF7E6}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=navy,
+  urlcolor=teal,
+  pdftitle={Informe del experimento de dimensión latente de un VAE}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Experimento de dimensión latente de un VAE}
+\rhead{Procesamiento de Imágenes y Visión por Computadora}
+\cfoot{\thepage}
+\setlength{\headheight}{14pt}
+
+\graphicspath{{outputs/latent_dimension_experiment/}}
+
+\newcommand{\studentname}{Nombre del estudiante}
+\newcommand{\studentid}{0000}
+\newcommand{\coursesection}{Sección}
+\newcommand{\submissiondate}{\today}
+
+\newtcolorbox{responsebox}[1][]{
+  colback=white,
+  colframe=teal!70!black,
+  boxrule=0.8pt,
+  arc=2pt,
+  title=Respuesta,
+  fonttitle=\bfseries,
+  breakable,
+  #1
+}
+
+\newtcolorbox{evidencebox}[1][]{
+  colback=lightgold,
+  colframe=gold!80!black,
+  boxrule=0.8pt,
+  arc=2pt,
+  title=Evidencia que debe incluir,
+  fonttitle=\bfseries,
+  breakable,
+  #1
+}
+
+\newcommand{\answerarea}[1][2.1cm]{%
+\begin{responsebox}
+\textit{Escriba aquí su respuesta.}
+\vspace{#1}
+\end{responsebox}
+}
+
+\newcommand{\experimentfigure}[3]{%
+\begin{figure}[H]
+\centering
+\IfFileExists{outputs/latent_dimension_experiment/#1}{%
+  \includegraphics[width=#2\textwidth]{#1}%
+}{%
+  \fbox{\parbox[c][5.0cm][c]{0.88\textwidth}{\centering
+  Ejecute el notebook para generar \texttt{\detokenize{#1}}.}}%
+}
+\caption{#3}
+\end{figure}
+}
+
+\title{\textbf{Informe de laboratorio: selección de la dimensión latente de un autoencoder variacional}}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{0.92\textwidth}{@{}>{\bfseries}lX>{\bfseries}lX@{}}
+Nombre: & \studentname & Carné: & \studentid \\
+Sección: & \coursesection & Fecha de entrega: & \submissiondate \\
+\end{tabularx}
+\end{center}
+
+\section{Objetivo del laboratorio}
+
+Se desea seleccionar un autoencoder variacional capaz de reconstruir dígitos
+reconocibles, generar muestras plausibles a partir de la distribución normal
+estándar, producir interpolaciones graduales y mantener una representación
+compacta. Se comparan las dimensiones latentes
+\[
+d_z\in\{2,8,16,64\}.
+\]
+La recomendación final debe apoyarse en evidencia cuantitativa y cualitativa.
+Ninguna métrica individual es suficiente para decidir.
+
+\section{Hipótesis iniciales}
+
+Complete esta sección antes de examinar los resultados.
+
+\subsection*{Pregunta 1}
+¿Qué dimensión latente espera que produzca la menor pérdida de reconstrucción?
+Explique la relación esperada entre capacidad latente y reconstrucción.
+\answerarea[2.5cm]
+
+\subsection*{Pregunta 2}
+¿Qué dimensión espera que produzca las muestras más plausibles para
+$\mathbf z\sim\mathcal N(0,I)$? Explique por qué la calidad de muestreo puede no
+seguir el mismo comportamiento que la reconstrucción.
+\answerarea[2.5cm]
+
+\subsection*{Pregunta 3}
+Prediga si todas las dimensiones disponibles estarán activas en el modelo con
+$d_z=64$. ¿Qué significa que una dimensión se encuentre inactiva?
+\answerarea[2.3cm]
+
+\subsection*{Pregunta 4}
+Escriba una recomendación inicial. Indique qué evidencia podría hacerle cambiar
+esa recomendación.
+\answerarea[2.5cm]
+
+\section{Integridad experimental}
+
+\subsection*{Pregunta 5}
+Registre la configuración y explique por qué deben mantenerse constantes todos
+los parámetros distintos de la dimensión latente.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Configuración & Valor \\
+\midrule
+Conjunto de datos & MNIST \\
+Dimensiones latentes & $2,8,16,64$ \\
+$\beta$ & \rule{3cm}{0.4pt} \\
+Épocas & \rule{3cm}{0.4pt} \\
+Tamaño de lote & \rule{3cm}{0.4pt} \\
+Tasa de aprendizaje & \rule{3cm}{0.4pt} \\
+Semilla aleatoria & \rule{3cm}{0.4pt} \\
+Umbral de actividad & \rule{3cm}{0.4pt} \\
+Dispositivo utilizado & \rule{3cm}{0.4pt} \\
+\bottomrule
+\end{tabular}
+\end{center}
+\answerarea[2.3cm]
+
+\section{Resultados cuantitativos}
+
+\IfFileExists{outputs/latent_dimension_experiment/summary_table.tex}{%
+\begin{table}[H]
+\centering
+\resizebox{\textwidth}{!}{\input{outputs/latent_dimension_experiment/summary_table.tex}}
+\caption{Comparación final de las dimensiones latentes candidatas.}
+\end{table}
+}{%
+\begin{center}
+\fbox{\parbox[c][3.2cm][c]{0.88\textwidth}{\centering
+Ejecute el notebook para generar \texttt{summary\_table.tex}.}}
+\end{center}
+}
+
+\subsection*{Pregunta 6}
+Ordene los cuatro modelos según su pérdida de reconstrucción en prueba. ¿Las
+mejoras entre dimensiones consecutivas son sustanciales o marginales? Incluya
+los valores medidos.
+\answerarea[2.8cm]
+
+\subsection*{Pregunta 7}
+¿Cómo cambian la divergencia KL total, el número de dimensiones activas y la
+fracción activa al aumentar $d_z$? Explique qué revela cada medida sobre la
+capacidad latente efectiva.
+\answerarea[3.0cm]
+
+\subsection*{Pregunta 8}
+Compare el número de parámetros y el tiempo de entrenamiento. ¿Aumentar $d_z$
+modifica sustancialmente el tamaño total y el costo computacional del modelo?
+\answerarea[2.8cm]
+
+\section{Comportamiento durante el entrenamiento}
+
+\experimentfigure{training_curves.png}{0.98}{Comportamiento de entrenamiento y prueba para cada dimensión latente.}
+
+\subsection*{Pregunta 9}
+¿Todos los modelos alcanzaron una región razonablemente estable en la última
+época? Identifique cualquier comparación afectada por convergencia incompleta.
+\answerarea[2.5cm]
+
+\subsection*{Pregunta 10}
+Describa la relación entre la pérdida de reconstrucción, la divergencia KL y el
+ELBO negativo. ¿Qué término explica las principales diferencias entre modelos?
+\answerarea[2.8cm]
+
+\section{Análisis de reconstrucción}
+
+\experimentfigure{reconstructions.png}{0.98}{Reconstrucciones de las mismas imágenes de prueba mediante las medias posteriores.}
+
+\subsection*{Pregunta 11}
+Identifique al menos dos imágenes en las que aumentar $d_z$ produzca una mejora
+visual significativa. Describa cambios en trazos, forma, ambigüedad o detalles.
+\answerarea[3.0cm]
+
+\subsection*{Pregunta 12}
+¿A partir de qué dimensión las dimensiones adicionales muestran rendimientos
+decrecientes? Utilice evidencia visual y la pérdida de reconstrucción.
+\answerarea[2.8cm]
+
+\section{Análisis de muestras del prior}
+
+\experimentfigure{prior_samples.png}{0.98}{Muestras generadas a partir de $\mathbf z\sim\mathcal N(0,I)$.}
+
+\subsection*{Pregunta 13}
+Compare el realismo y la diversidad de las muestras. ¿Qué modelo produce la
+mayor proporción de dígitos reconocibles? ¿Cuál muestra mayor variedad visible?
+\answerarea[3.0cm]
+
+\subsection*{Pregunta 14}
+¿El modelo con la mejor reconstrucción también produce las mejores muestras del
+prior? Explique por qué ambos resultados pueden diferir en un VAE.
+\begin{evidencebox}
+Considere el término de reconstrucción y la necesidad de que los posteriores
+codificados sean compatibles con el prior utilizado para generar.
+\end{evidencebox}
+\answerarea[3.0cm]
+
+\section{Análisis de interpolación}
+
+\experimentfigure{interpolations.png}{0.98}{Interpolación lineal entre las medias posteriores del par seleccionado.}
+
+\subsection*{Pregunta 15}
+¿Qué modelo produce la transición más gradual y plausible? Describa dónde cambia
+la identidad y si los trazos intermedios permanecen coherentes.
+\answerarea[3.0cm]
+
+\subsection*{Pregunta 16}
+¿Una interpolación suave demuestra que cada dimensión latente tiene un significado
+interpretable? Explique la limitación de esa conclusión.
+\answerarea[2.6cm]
+
+\section{Organización del espacio latente}
+
+\experimentfigure{latent_space.png}{0.86}{Medias posteriores: representación directa para $d_z=2$ y PCA para espacios mayores.}
+
+\subsection*{Pregunta 17}
+¿Qué clases forman regiones distinguibles? Identifique clases que se superponen
+y explique si su similitud visual puede justificarlo.
+\answerarea[3.0cm]
+
+\subsection*{Pregunta 18}
+¿Por qué la gráfica directa de $d_z=2$ debe interpretarse de manera diferente a
+las proyecciones bidimensionales obtenidas mediante PCA?
+\answerarea[2.8cm]
+
+\section{Análisis de dimensiones activas}
+
+\experimentfigure{active_dimensions.png}{0.88}{Contribución KL promedio de cada dimensión; la línea discontinua indica el umbral de actividad.}
+
+\subsection*{Pregunta 19}
+¿Cada modelo utiliza todas las dimensiones disponibles? Compare el número y la
+proporción de dimensiones activas.
+\answerarea[2.7cm]
+
+\subsection*{Pregunta 20}
+Si el modelo de 64 dimensiones deja muchas dimensiones inactivas, ¿qué implica
+para su capacidad nominal y efectiva? ¿Debe considerarse automáticamente un
+fracaso de entrenamiento?
+\answerarea[3.2cm]
+
+\section{Recomendación final}
+
+\subsection*{Pregunta 21: dimensión seleccionada}
+\begin{center}
+\Large Recomiendo $d_z=\boxed{\phantom{000}}$ para el escenario planteado.
+\end{center}
+
+\subsection*{Pregunta 22: justificación basada en evidencia}
+Defienda su decisión utilizando:
+\begin{itemize}[leftmargin=*]
+  \item al menos tres valores cuantitativos;
+  \item evidencia de reconstrucción;
+  \item realismo y diversidad de las muestras del prior;
+  \item comportamiento de las interpolaciones;
+  \item dimensiones latentes activas; y
+  \item compacidad o costo computacional.
+\end{itemize}
+\answerarea[7.0cm]
+
+\subsection*{Pregunta 23: debilidad del modelo seleccionado}
+Identifique la principal debilidad del modelo recomendado. Explique por qué la
+recomendación sigue siendo razonable.
+\answerarea[3.2cm]
+
+\subsection*{Pregunta 24: escenario alternativo}
+Describa un uso realista en el que otra dimensión sería preferible. Seleccione
+la dimensión alternativa y justifique su elección.
+\answerarea[3.5cm]
+
+\section{Limitaciones y experimentos posteriores}
+
+\subsection*{Pregunta 25}
+Identifique al menos tres limitaciones del experimento. Considere duración del
+entrenamiento, variación aleatoria, subjetividad visual, complejidad de MNIST,
+arquitectura y umbral de actividad.
+\answerarea[4.0cm]
+
+\subsection*{Pregunta 26}
+Proponga un experimento posterior que fortalezca la recomendación. Indique la
+variable que cambiaría, las cantidades que mediría y qué resultado apoyaría o
+contradiría su decisión.
+\answerarea[4.0cm]
+
+\section{Conclusión}
+
+Escriba una conclusión de 150--250 palabras. Indique el modelo seleccionado,
+resuma la evidencia decisiva y describa el principal compromiso observado.
+\answerarea[4.0cm]
+
+\section*{Lista de verificación}
+\begin{itemize}[label=$\square$,leftmargin=*]
+  \item Se respondieron las 26 preguntas.
+  \item La recomendación final selecciona una dimensión latente.
+  \item Las afirmaciones cuantitativas incluyen valores medidos.
+  \item Las afirmaciones cualitativas hacen referencia a figuras o ejemplos.
+  \item Se diferencia la gráfica directa de las proyecciones mediante PCA.
+  \item Se analiza una limitación y un escenario alternativo.
+  \item El informe completo compila sin errores.
+\end{itemize}
+
+\end{document}

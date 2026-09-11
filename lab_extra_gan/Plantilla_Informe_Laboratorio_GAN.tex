@@ -1,0 +1,192 @@
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage[hidelinks]{hyperref}
+\usepackage[strings]{underscore}
+
+\graphicspath{{outputs/gan_mode_collapse/}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.6em}
+\setlist[enumerate]{leftmargin=*,itemsep=0.8em}
+
+\newcommand{\answerbox}[1]{%
+  \par\noindent\textcolor{gray}{\rule{\linewidth}{0.4pt}}%
+  \vspace{#1}\par\noindent\textcolor{gray}{\rule{\linewidth}{0.4pt}}%
+}
+
+\newcommand{\resultfigure}[2]{%
+  \begin{figure}[H]
+    \centering
+    \IfFileExists{outputs/gan_mode_collapse/#1}{%
+      \includegraphics[width=0.96\linewidth,height=0.55\textheight,keepaspectratio]{#1}%
+    }{%
+      \fbox{\parbox[c][4cm][c]{0.88\linewidth}{\centering
+      Ejecute el notebook para generar \texttt{\detokenize{#1}}.}}%
+    }
+    \caption{#2}
+  \end{figure}
+}
+
+\title{Informe de laboratorio\\Recuperación del colapso de modos en una GAN}
+\author{Estudiante: \rule{8cm}{0.4pt}}
+\date{Carné: \rule{4cm}{0.4pt}\hfill Fecha: \rule{3cm}{0.4pt}}
+
+\begin{document}
+\maketitle
+
+\section{Propósito e hipótesis}
+
+Todos los experimentos de recuperación parten del mismo punto de control con
+colapso de modos. La variable independiente es el peso de la pérdida de
+diversidad $\lambda_{\mathrm{div}}\in\{0,0.1,0.5,1.0\}$. La función objetivo del
+generador es
+\[
+  \mathcal{L}_G
+  =\mathcal{L}_{\mathrm{adv}}
+  +\lambda_{\mathrm{div}}\mathcal{L}_{\mathrm{div}},
+  \qquad
+  \mathcal{L}_{\mathrm{div}}
+  =-\mathbb{E}\!\left[
+    \frac{\lVert G(z_1)-G(z_2)\rVert_1}
+         {\lVert z_1-z_2\rVert_1+\epsilon}
+  \right].
+\]
+
+\begin{enumerate}
+  \item Antes de observar los resultados, ¿qué valor de
+  $\lambda_{\mathrm{div}}$ esperaba que funcionara mejor? Explique el beneficio
+  esperado y un posible riesgo.
+\end{enumerate}
+\answerbox{2.2cm}
+
+\section{Diagnóstico del punto de control colapsado}
+
+\resultfigure{collapsed_samples.png}{Muestras del punto de control común con colapso de modos.}
+\resultfigure{collapsed_class_distribution.png}{Distribución de dígitos predicha por el clasificador en el punto colapsado.}
+
+\begin{enumerate}[resume]
+  \item ¿Qué evidencia visual sugiere colapso de modos? Distinga entre clases
+  ausentes y apariencias repetidas dentro de una clase representada.
+\end{enumerate}
+\answerbox{2.5cm}
+
+\begin{enumerate}[resume]
+  \item Utilice el número de modos y la entropía normalizada para describir el
+  colapso entre clases. ¿Qué información aporta cada medida?
+\end{enumerate}
+\answerbox{2.5cm}
+
+\begin{enumerate}[resume]
+  \item ¿Las muestras mostradas permiten identificar confiablemente el colapso
+  dentro de cada clase? Explique qué evidencia adicional se necesita.
+\end{enumerate}
+\answerbox{2.2cm}
+
+\section{Resultados de recuperación}
+
+\IfFileExists{outputs/gan_mode_collapse/summary_table.tex}{%
+  \begin{table}[H]
+    \centering
+    \small
+    \resizebox{\linewidth}{!}{\input{outputs/gan_mode_collapse/summary_table.tex}}
+    \caption{Resultados cuantitativos generados por el notebook.}
+  \end{table}
+}{%
+  \begin{center}
+    \fbox{\parbox[c][2.2cm][c]{0.88\linewidth}{\centering
+    Ejecute el notebook para generar
+    \texttt{outputs/gan\_mode\_collapse/summary\_table.tex}.}}
+  \end{center}
+}
+
+\resultfigure{recovery_samples.png}{Muestras del punto colapsado y de todas las configuraciones de recuperación.}
+\resultfigure{class_distributions.png}{Distribuciones de clases predichas; la línea discontinua indica el umbral de modo.}
+\resultfigure{recovery_metrics.png}{Comparación cuantitativa de las configuraciones de recuperación.}
+
+\begin{enumerate}[resume]
+  \item ¿Qué configuraciones recuperan el mayor número de clases? ¿Un número
+  alto de modos implica necesariamente una distribución equilibrada? Utilice
+  la entropía como evidencia.
+\end{enumerate}
+\answerbox{2.5cm}
+
+\begin{enumerate}[resume]
+  \item Compare la confianza del clasificador. Identifique cualquier compromiso
+  aparente entre diversidad y calidad.
+\end{enumerate}
+\answerbox{2.5cm}
+
+\begin{enumerate}[resume]
+  \item Compare la diversidad de características con la diversidad dentro de
+  cada clase. ¿Qué configuraciones mejoran ambas medidas y cuáles mejoran
+  principalmente una?
+\end{enumerate}
+\answerbox{2.8cm}
+
+\begin{enumerate}[resume]
+  \item Examine las muestras. ¿La mayor diversidad representa variaciones
+  significativas o solamente ruido, distorsiones o dígitos ambiguos? Describa
+  dos ejemplos concretos.
+\end{enumerate}
+\answerbox{3.0cm}
+
+\section{Comportamiento durante el entrenamiento}
+
+\resultfigure{recovery_training.png}{Pérdidas del generador y discriminador durante la recuperación.}
+
+\begin{enumerate}[resume]
+  \item ¿Por qué las pérdidas totales del generador para distintos valores de
+  $\lambda_{\mathrm{div}}$ no deben compararse como si midieran exactamente la
+  misma función objetivo?
+\end{enumerate}
+\answerbox{2.5cm}
+
+\begin{enumerate}[resume]
+  \item ¿Las curvas de pérdida demuestran por sí solas que se resolvió el
+  colapso de modos? Justifique utilizando los demás resultados.
+\end{enumerate}
+\answerbox{2.5cm}
+
+\section{Decisión y limitaciones}
+
+\begin{enumerate}[resume]
+  \item Seleccione un valor de $\lambda_{\mathrm{div}}$. Defienda la elección
+  con al menos dos resultados cuantitativos y dos observaciones visuales.
+\end{enumerate}
+\answerbox{3.4cm}
+
+\begin{enumerate}[resume]
+  \item Si la fidelidad de las imágenes fuera más importante que la cobertura
+  de clases, ¿cambiaría su elección? Justifique.
+\end{enumerate}
+\answerbox{2.4cm}
+
+\begin{enumerate}[resume]
+  \item Indique una limitación de utilizar un clasificador de MNIST para medir
+  la cobertura de la GAN y una limitación del diseño experimental.
+\end{enumerate}
+\answerbox{2.8cm}
+
+\begin{enumerate}[resume]
+  \item Proponga un experimento posterior que fortalezca o cuestione su
+  conclusión. Indique la variable que modificaría y la evidencia que recopilaría.
+\end{enumerate}
+\answerbox{2.8cm}
+
+\section*{Recomendación final}
+
+Valor recomendado: $\lambda_{\mathrm{div}}=\rule{2cm}{0.4pt}$
+
+Conclusión en una oración:
+\answerbox{1.8cm}
+
+\end{document}

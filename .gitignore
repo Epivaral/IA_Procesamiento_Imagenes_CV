@@ -7,3 +7,15 @@ __pycache__/
 
 # macOS Finder metadata
 .DS_Store
+
+# Generative lab: reproducible local data and training checkpoints
+demos_generativos/datos/
+demos_generativos/experiments/**/*.pt
+generative-lab-web/node_modules/
+generative-lab-web/dist/
+generative-lab-web/.angular/
+generative-lab-web/test-results/
+generative-lab-web/playwright-report/
+
+# Class materials
+material de clase/

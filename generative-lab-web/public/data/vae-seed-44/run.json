@@ -1,0 +1,1579 @@
+{
+  "schema_version": 1,
+  "id": "vae-seed-44",
+  "model": "vae",
+  "seed": 44,
+  "status": "complete",
+  "environment": {
+    "python": "3.14.0",
+    "torch": "2.13.0",
+    "numpy": "2.3.5",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "processor": "arm",
+    "cpu_count": 12,
+    "threads": 2,
+    "device": "cpu"
+  },
+  "config": {
+    "epochs": 20,
+    "batch_size": 128,
+    "train_count": 60000,
+    "dataset": "MNIST 0\u20139",
+    "latent_dim": 64,
+    "learning_rate": 0.001,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "source_sha256": "33904631f550ed7b42c2b0c4d7361f3bf344ac0248f1f2ba344f473149f64376",
+    "evaluator_sha256": "b715780bd1c3ecdf10025b050ceb6b840d982d831006fc7034f61c0e5ff61db3",
+    "parameters": 319713,
+    "discriminator_parameters": 0
+  },
+  "epochs": [
+    {
+      "epoch": 0,
+      "step": 0,
+      "examples_seen": 0,
+      "training_seconds": 0.0,
+      "evaluation_seconds": 0.08691683399956673,
+      "losses": null,
+      "metrics": {
+        "feature_mmd": 2.9465710352453875,
+        "entropy": -0.0,
+        "coverage": 1,
+        "digit_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1024,
+          0,
+          0,
+          0,
+          0
+        ],
+        "sample_count": 1024
+      },
+      "image": "images/epoch-000.png",
+      "reconstruction": "images/reconstruction-000.png"
+    },
+    {
+      "epoch": 1,
+      "step": 469,
+      "examples_seen": 60000,
+      "training_seconds": 10.276947874997859,
+      "evaluation_seconds": 0.059133332993951626,
+      "losses": {
+        "total": 180.32328774414063,
+        "reconstruction": 159.88032930908204,
+        "kl": 20.442958242034912
+      },
+      "metrics": {
+        "feature_mmd": 0.3043880491926778,
+        "entropy": 2.11021089553833,
+        "coverage": 10,
+        "digit_counts": [
+          44,
+          123,
+          175,
+          100,
+          109,
+          213,
+          29,
+          157,
+          28,
+          46
+        ],
+        "sample_count": 1024
+      },
+      "image": "images/epoch-001.png",
+      "reconstruction": "images/reconstruction-001.png"
+    },
+    {
+      "epoch": 2,
+      "step": 938,
+      "examples_seen": 120000,
+      "training_seconds": 20.615492584001913,
+      "evaluation_seconds": 0.060218124999664724,
+      "losses": {
+        "total": 123.18167548421224,
+        "reconstruction": 94.75334223632812,
+        "kl": 28.428333360799154
+      },
+      "metrics": {
+        "feature_mmd": 0.12172249906812382,
+        "entropy": 2.2093148231506348,
+        "coverage": 10,
+        "digit_counts": [
+          56,
+          95,
+          173,
+          112,
+          150,
+          117,
+          42,
+          153,
+          64,
+          62
+        ],
+        "sample_count": 1024
+      },
+      "image": "images/epoch-002.png",
+      "reconstruction": "images/reconstruction-002.png"
+    },
+    {
+      "epoch": 3,
+      "step": 1407,
+      "examples_seen": 180000,
+      "training_seconds": 31.370989000999543,
+      "evaluation_seconds": 0.060029624997696374,
+      "losses": {
+        "total": 114.04441735432943,
+        "reconstruction": 85.91014669596355,
+        "kl": 28.13427087504069
+      },
+      "metrics": {
+        "feature_mmd": 0.08592502052358952,
+        "entropy": 2.2204079627990723,
+        "coverage": 10,
+        "digit_counts": [
+          73,
+          74,
+          161,
+          116,
+          158,
+          101,
+          35,
+          151,
+          84,
+          71
+        ],
+        "sample_count": 1024
+      },
+      "image": "images/epoch-003.png",
+      "reconstruction": "images/reconstruction-003.png"
+    },
+    {
+      "epoch": 4,
+      "step": 1876,
+      "examples_seen": 240000,
+      "training_seconds": 41.59594400100468,
+      "evaluation_seconds": 0.05734695900173392,
+      "losses": {
+        "total": 110.42815776774088,
+        "reconstruction": 82.54177854410807,
+        "kl": 27.886379337565103
+      },
+      "metrics": {
+        "feature_mmd": 0.07102434718018458,
+        "entropy": 2.2330033779144287,
+        "coverage": 10,
+        "digit_counts": [
+          73,
+          64,
+          147,
+          123,
+          164,
+          97,
+          46,
+          142,
+          97,
+          71
+        ],
+        "sample_count": 1024
+      },
+      "image": "images/epoch-004.png",
+      "reconstruction": "images/reconstruction-004.png"
+    },
+    {
+      "epoch": 5,
+      "step": 2345,
+      "examples_seen": 300000,
+      "training_seconds": 51.78518037600588,
+      "evaluation_seconds": 0.05652070900396211,
+      "losses": {
+        "total": 108.4120353149414,
+        "reconstruction": 80.59782674560547,
+        "kl": 27.814208753458658
+      },
+      "metrics": {
+        "feature_mmd": 0.06520627160057657,
+        "entropy": 2.2309865951538086,
+        "coverage": 10,
+        "digit_counts": [
+          73,
+          56,
+          143,
+          124,
+          160,
+          100,
+          37,
+          134,
+          106,
+          91
+        ],
+        "sample_count": 1024
+      },
+      "image": "images/epoch-005.png",
+      "reconstruction": "images/reconstruction-005.png"
+    },
+    {
+      "epoch": 6,
+      "step": 2814,
+      "examples_seen": 360000,
+      "training_seconds": 62.07748654300667,
+      "evaluation_seconds": 0.0568379999967874,
+      "losses": {
+        "total": 107.12946448160807,
+        "reconstruction": 79.41043098958333,
+        "kl": 27.719033365885416
+      },
+      "metrics": {
+        "feature_mmd": 0.06072840048348205,
+        "entropy": 2.2387051582336426,
+        "coverage": 10,
+        "digit_counts": [
+          75,
+          55,
+          138,
+          121,
+          157,
+          103,
+          41,
+          130,
+          113,
+          91
+        ],
+        "sample_count": 1024
+      },
+      "image": "images/epoch-006.png",
+      "reconstruction": "images/reconstruction-006.png"
+    },
+    {
+      "epoch": 7,
+      "step": 3283,
+      "examples_seen": 420000,
+      "training_seconds": 72.4713730430085,
+      "evaluation_seconds": 0.05541254199488321,
+      "losses": {
+        "total": 106.19381396484376,
+        "reconstruction": 78.58666879475912,
+        "kl": 27.60714499511719
+      },
+      "metrics": {
+        "feature_mmd": 0.05835965828486955,
+        "entropy": 2.2358241081237793,
+        "coverage": 10,
+        "digit_counts": [
+          76,
+          57,
+          134,
+          118,
+          163,
+          102,
+          37,
+          130,
+          112,
+          95
+        ],
+        "sample_count": 1024
+      },
+      "image": "images/epoch-007.png",
+      "reconstruction": "images/reconstruction-007.png"
+    },
+    {
+      "epoch": 8,
+      "step": 3752,
+      "examples_seen": 480000,
+      "training_seconds": 82.69718195901078,
+      "evaluation_seconds": 0.05694025000411784,
+      "losses": {
+        "total": 105.58101420898437,
+        "reconstruction": 77.99405895182292,
+        "kl": 27.586955069986978
+      },
+      "metrics": {
+        "feature_mmd": 0.05691501080860384,
+        "entropy": 2.244368553161621,
+        "coverage": 10,
+        "digit_counts": [
+          74,
+          62,
+          134,
+          127,
+          156,
+          103,
+          42,
+          127,
+          109,
+          90
+        ],
+        "sample_count": 1024
+      },
+      "image": "images/epoch-008.png",
+      "reconstruction": "images/reconstruction-008.png"
+    },
+    {
+      "epoch": 9,
+      "step": 4221,
+      "examples_seen": 540000,
+      "training_seconds": 92.88849762501195,
+      "evaluation_seconds": 0.056532790993514936,
+      "losses": {
+        "total": 105.00859696044922,
+        "reconstruction": 77.49862386067709,
+        "kl": 27.509972978719077
+      },
+      "metrics": {
+        "feature_mmd": 0.05630452370627914,
+        "entropy": 2.248386859893799,
+        "coverage": 10,
+        "digit_counts": [
+          72,
+          58,
+          132,
+          129,
+          147,
+          108,
+          45,
+          125,
+          111,
+          97
+        ],
+        "sample_count": 1024
+      },
+      "image": "images/epoch-009.png",
+      "reconstruction": "images/reconstruction-009.png"
+    },
+    {
+      "epoch": 10,
+      "step": 4690,
+      "examples_seen": 600000,
+      "training_seconds": 102.75063312501152,
+      "evaluation_seconds": 0.055076917000405956,
+      "losses": {
+        "total": 104.57324959716797,
+        "reconstruction": 77.12700616861979,
+        "kl": 27.446243392944336
+      },
+      "metrics": {
+        "feature_mmd": 0.05542601437123906,
+        "entropy": 2.2509405612945557,
+        "coverage": 10,
+        "digit_counts": [
+          70,
+          59,
+          123,
+          130,
+          143,
+          114,
+          46,
+          129,
+          110,
+          100
+        ],
+        "sample_count": 1024
+      },
+      "image": "images/epoch-010.png",
+      "reconstruction": "images/reconstruction-010.png"
+    },
+    {
+      "epoch": 11,
+      "step": 5159,
+      "examples_seen": 660000,
+      "training_seconds": 112.70539725000708,
+      "evaluation_seconds": 0.05692500000441214,
+      "losses": {
+        "total": 104.17074608154297,
+        "reconstruction": 76.74809008382161,
+        "kl": 27.422655925496418
+      },
+      "metrics": {
+        "feature_mmd": 0.05163309649416625,
+        "entropy": 2.2536568641662598,
+        "coverage": 10,
+        "digit_counts": [
+          73,
+          58,
+          127,
+          126,
+          149,
+          110,
+          50,
+          123,
+          112,
+          96
+        ],
+        "sample_count": 1024
+      },
+      "image": "images/epoch-011.png",
+      "reconstruction": "images/reconstruction-011.png"
+    },
+    {
+      "epoch": 12,
+      "step": 5628,
+      "examples_seen": 720000,
+      "training_seconds": 122.53793833300733,
+      "evaluation_seconds": 0.05672449999838136,
+      "losses": {
+        "total": 103.78821599527994,
+        "reconstruction": 76.46539783121744,
+        "kl": 27.32281797587077
+      },
+      "metrics": {
+        "feature_mmd": 0.056646121093031354,
+        "entropy": 2.254415988922119,
+        "coverage": 10,
+        "digit_counts": [
+          72,
+          61,
+          125,
+          128,
+          136,
+          114,
+          45,
+          126,
+          114,
+          103
+        ],
+        "sample_count": 1024
+      },
+      "image": "images/epoch-012.png",
+      "reconstruction": "images/reconstruction-012.png"
+    },
+    {
+      "epoch": 13,
+      "step": 6097,
+      "examples_seen": 780000,
+      "training_seconds": 132.63630262500374,
+      "evaluation_seconds": 0.05585554100252921,
+      "losses": {
+        "total": 103.51230870361329,
+        "reconstruction": 76.25802852783202,
+        "kl": 27.254280268351238
+      },
+      "metrics": {
+        "feature_mmd": 0.053040089408852964,
+        "entropy": 2.25704288482666,
+        "coverage": 10,
+        "digit_counts": [
+          77,
+          59,
+          128,
+          127,
+          138,
+          108,
+          49,
+          126,
+          116,
+          96
+        ],
+        "sample_count": 1024
+      },
+      "image": "images/epoch-013.png",
+      "reconstruction": "images/reconstruction-013.png"
+    },
+    {
+      "epoch": 14,
+      "step": 6566,
+      "examples_seen": 840000,
+      "training_seconds": 142.83658741700492,
+      "evaluation_seconds": 0.05729354199866066,
+      "losses": {
+        "total": 103.25994212646485,
+        "reconstruction": 76.04911858317057,
+        "kl": 27.210823528035483
+      },
+      "metrics": {
+        "feature_mmd": 0.05409403420201642,
+        "entropy": 2.258545398712158,
+        "coverage": 10,
+        "digit_counts": [
+          81,
+          60,
+          132,
+          122,
+          133,
+          109,
+          47,
+          126,
+          116,
+          98
+        ],
+        "sample_count": 1024
+      },
+      "image": "images/epoch-014.png",
+      "reconstruction": "images/reconstruction-014.png"
+    },
+    {
+      "epoch": 15,
+      "step": 7035,
+      "examples_seen": 900000,
+      "training_seconds": 152.9311157090051,
+      "evaluation_seconds": 0.056340249997447245,
+      "losses": {
+        "total": 103.06222659912109,
+        "reconstruction": 75.87248872477214,
+        "kl": 27.189737858072917
+      },
+      "metrics": {
+        "feature_mmd": 0.05195969093058039,
+        "entropy": 2.2507221698760986,
+        "coverage": 10,
+        "digit_counts": [
+          80,
+          61,
+          133,
+          126,
+          137,
+          104,
+          40,
+          125,
+          120,
+          98
+        ],
+        "sample_count": 1024
+      },
+      "image": "images/epoch-015.png",
+      "reconstruction": "images/reconstruction-015.png"
+    },
+    {
+      "epoch": 16,
+      "step": 7504,
+      "examples_seen": 960000,
+      "training_seconds": 163.3872385420109,
+      "evaluation_seconds": 0.05705899999884423,
+      "losses": {
+        "total": 102.843038277181,
+        "reconstruction": 75.71109136149089,
+        "kl": 27.131946818033853
+      },
+      "metrics": {
+        "feature_mmd": 0.049756145822662745,
+        "entropy": 2.261087417602539,
+        "coverage": 10,
+        "digit_counts": [
+          79,
+          67,
+          130,
+          129,
+          132,
+          106,
+          48,
+          129,
+          111,
+          93
+        ],
+        "sample_count": 1024
+      },
+      "image": "images/epoch-016.png",
+      "reconstruction": "images/reconstruction-016.png"
+    },
+    {
+      "epoch": 17,
+      "step": 7973,
+      "examples_seen": 1020000,
+      "training_seconds": 173.65489370901196,
+      "evaluation_seconds": 0.06078570800309535,
+      "losses": {
+        "total": 102.66455380452474,
+        "reconstruction": 75.57301560872396,
+        "kl": 27.09153825683594
+      },
+      "metrics": {
+        "feature_mmd": 0.051177193557279566,
+        "entropy": 2.25849986076355,
+        "coverage": 10,
+        "digit_counts": [
+          81,
+          61,
+          121,
+          135,
+          137,
+          110,
+          49,
+          128,
+          110,
+          92
+        ],
+        "sample_count": 1024
+      },
+      "image": "images/epoch-017.png",
+      "reconstruction": "images/reconstruction-017.png"
+    },
+    {
+      "epoch": 18,
+      "step": 8442,
+      "examples_seen": 1080000,
+      "training_seconds": 183.9208206670155,
+      "evaluation_seconds": 0.058381167000334244,
+      "losses": {
+        "total": 102.45331901448567,
+        "reconstruction": 75.465848046875,
+        "kl": 26.987470885213217
+      },
+      "metrics": {
+        "feature_mmd": 0.055208337722440604,
+        "entropy": 2.254856586456299,
+        "coverage": 10,
+        "digit_counts": [
+          76,
+          64,
+          139,
+          133,
+          128,
+          110,
+          45,
+          125,
+          111,
+          93
+        ],
+        "sample_count": 1024
+      },
+      "image": "images/epoch-018.png",
+      "reconstruction": "images/reconstruction-018.png"
+    },
+    {
+      "epoch": 19,
+      "step": 8911,
+      "examples_seen": 1140000,
+      "training_seconds": 194.18092962601077,
+      "evaluation_seconds": 0.05567320800037123,
+      "losses": {
+        "total": 102.31567549235027,
+        "reconstruction": 75.34044231363933,
+        "kl": 26.975233361816407
+      },
+      "metrics": {
+        "feature_mmd": 0.052600046401922285,
+        "entropy": 2.2616193294525146,
+        "coverage": 10,
+        "digit_counts": [
+          79,
+          65,
+          131,
+          126,
+          131,
+          109,
+          48,
+          124,
+          115,
+          96
+        ],
+        "sample_count": 1024
+      },
+      "image": "images/epoch-019.png",
+      "reconstruction": "images/reconstruction-019.png"
+    },
+    {
+      "epoch": 20,
+      "step": 9380,
+      "examples_seen": 1200000,
+      "training_seconds": 204.2686747930129,
+      "evaluation_seconds": 0.05611920799856307,
+      "losses": {
+        "total": 102.1736786336263,
+        "reconstruction": 75.24405640055339,
+        "kl": 26.929622326660155
+      },
+      "metrics": {
+        "feature_mmd": 0.05069796930515302,
+        "entropy": 2.2584261894226074,
+        "coverage": 10,
+        "digit_counts": [
+          80,
+          59,
+          130,
+          128,
+          137,
+          108,
+          50,
+          124,
+          115,
+          93
+        ],
+        "sample_count": 1024
+      },
+      "image": "images/epoch-020.png",
+      "reconstruction": "images/reconstruction-020.png"
+    }
+  ],
+  "steps": [
+    {
+      "step": 100,
+      "epoch": 1,
+      "losses": {
+        "total": 199.80091857910156,
+        "reconstruction": 186.74493408203125,
+        "kl": 13.055985450744629
+      }
+    },
+    {
+      "step": 200,
+      "epoch": 1,
+      "losses": {
+        "total": 169.9894561767578,
+        "reconstruction": 151.98931884765625,
+        "kl": 18.000139236450195
+      }
+    },
+    {
+      "step": 300,
+      "epoch": 1,
+      "losses": {
+        "total": 140.60708618164062,
+        "reconstruction": 116.80268859863281,
+        "kl": 23.804405212402344
+      }
+    },
+    {
+      "step": 400,
+      "epoch": 1,
+      "losses": {
+        "total": 141.976806640625,
+        "reconstruction": 113.19081115722656,
+        "kl": 28.786001205444336
+      }
+    },
+    {
+      "step": 500,
+      "epoch": 2,
+      "losses": {
+        "total": 131.72006225585938,
+        "reconstruction": 102.38665008544922,
+        "kl": 29.333404541015625
+      }
+    },
+    {
+      "step": 600,
+      "epoch": 2,
+      "losses": {
+        "total": 129.81436157226562,
+        "reconstruction": 102.10723876953125,
+        "kl": 27.707115173339844
+      }
+    },
+    {
+      "step": 700,
+      "epoch": 2,
+      "losses": {
+        "total": 122.17398834228516,
+        "reconstruction": 93.18388366699219,
+        "kl": 28.99010467529297
+      }
+    },
+    {
+      "step": 800,
+      "epoch": 2,
+      "losses": {
+        "total": 121.80451965332031,
+        "reconstruction": 93.48207092285156,
+        "kl": 28.32244873046875
+      }
+    },
+    {
+      "step": 900,
+      "epoch": 2,
+      "losses": {
+        "total": 119.27973937988281,
+        "reconstruction": 89.80241394042969,
+        "kl": 29.477323532104492
+      }
+    },
+    {
+      "step": 1000,
+      "epoch": 3,
+      "losses": {
+        "total": 119.08810424804688,
+        "reconstruction": 90.77023315429688,
+        "kl": 28.31787109375
+      }
+    },
+    {
+      "step": 1100,
+      "epoch": 3,
+      "losses": {
+        "total": 114.26111602783203,
+        "reconstruction": 85.82502746582031,
+        "kl": 28.43608856201172
+      }
+    },
+    {
+      "step": 1200,
+      "epoch": 3,
+      "losses": {
+        "total": 109.93215942382812,
+        "reconstruction": 81.70536041259766,
+        "kl": 28.22679901123047
+      }
+    },
+    {
+      "step": 1300,
+      "epoch": 3,
+      "losses": {
+        "total": 112.86390686035156,
+        "reconstruction": 86.70958709716797,
+        "kl": 26.15432357788086
+      }
+    },
+    {
+      "step": 1400,
+      "epoch": 3,
+      "losses": {
+        "total": 112.66770935058594,
+        "reconstruction": 83.98477172851562,
+        "kl": 28.682933807373047
+      }
+    },
+    {
+      "step": 1500,
+      "epoch": 4,
+      "losses": {
+        "total": 117.05322265625,
+        "reconstruction": 87.4658203125,
+        "kl": 29.587398529052734
+      }
+    },
+    {
+      "step": 1600,
+      "epoch": 4,
+      "losses": {
+        "total": 107.86919403076172,
+        "reconstruction": 80.77998352050781,
+        "kl": 27.089208602905273
+      }
+    },
+    {
+      "step": 1700,
+      "epoch": 4,
+      "losses": {
+        "total": 108.18817901611328,
+        "reconstruction": 80.89817810058594,
+        "kl": 27.290002822875977
+      }
+    },
+    {
+      "step": 1800,
+      "epoch": 4,
+      "losses": {
+        "total": 109.56523895263672,
+        "reconstruction": 81.6285629272461,
+        "kl": 27.936676025390625
+      }
+    },
+    {
+      "step": 1900,
+      "epoch": 5,
+      "losses": {
+        "total": 110.32542419433594,
+        "reconstruction": 81.98164367675781,
+        "kl": 28.34378433227539
+      }
+    },
+    {
+      "step": 2000,
+      "epoch": 5,
+      "losses": {
+        "total": 110.38849639892578,
+        "reconstruction": 82.0059814453125,
+        "kl": 28.38251495361328
+      }
+    },
+    {
+      "step": 2100,
+      "epoch": 5,
+      "losses": {
+        "total": 110.29779815673828,
+        "reconstruction": 81.51911926269531,
+        "kl": 28.77867889404297
+      }
+    },
+    {
+      "step": 2200,
+      "epoch": 5,
+      "losses": {
+        "total": 109.81703186035156,
+        "reconstruction": 82.36588287353516,
+        "kl": 27.451147079467773
+      }
+    },
+    {
+      "step": 2300,
+      "epoch": 5,
+      "losses": {
+        "total": 107.13072204589844,
+        "reconstruction": 80.39006042480469,
+        "kl": 26.740663528442383
+      }
+    },
+    {
+      "step": 2400,
+      "epoch": 6,
+      "losses": {
+        "total": 109.3785400390625,
+        "reconstruction": 81.59857177734375,
+        "kl": 27.779964447021484
+      }
+    },
+    {
+      "step": 2500,
+      "epoch": 6,
+      "losses": {
+        "total": 105.87251281738281,
+        "reconstruction": 78.0853271484375,
+        "kl": 27.787189483642578
+      }
+    },
+    {
+      "step": 2600,
+      "epoch": 6,
+      "losses": {
+        "total": 105.31817626953125,
+        "reconstruction": 77.8826904296875,
+        "kl": 27.435487747192383
+      }
+    },
+    {
+      "step": 2700,
+      "epoch": 6,
+      "losses": {
+        "total": 105.17235565185547,
+        "reconstruction": 76.89512634277344,
+        "kl": 28.2772274017334
+      }
+    },
+    {
+      "step": 2800,
+      "epoch": 6,
+      "losses": {
+        "total": 105.85018920898438,
+        "reconstruction": 78.48023986816406,
+        "kl": 27.369945526123047
+      }
+    },
+    {
+      "step": 2900,
+      "epoch": 7,
+      "losses": {
+        "total": 105.39544677734375,
+        "reconstruction": 77.42385864257812,
+        "kl": 27.971588134765625
+      }
+    },
+    {
+      "step": 3000,
+      "epoch": 7,
+      "losses": {
+        "total": 104.58146667480469,
+        "reconstruction": 77.43824768066406,
+        "kl": 27.143218994140625
+      }
+    },
+    {
+      "step": 3100,
+      "epoch": 7,
+      "losses": {
+        "total": 103.16366577148438,
+        "reconstruction": 75.4953384399414,
+        "kl": 27.668331146240234
+      }
+    },
+    {
+      "step": 3200,
+      "epoch": 7,
+      "losses": {
+        "total": 105.5562973022461,
+        "reconstruction": 77.52635192871094,
+        "kl": 28.02994728088379
+      }
+    },
+    {
+      "step": 3300,
+      "epoch": 8,
+      "losses": {
+        "total": 105.02659606933594,
+        "reconstruction": 76.56065368652344,
+        "kl": 28.465944290161133
+      }
+    },
+    {
+      "step": 3400,
+      "epoch": 8,
+      "losses": {
+        "total": 103.61418914794922,
+        "reconstruction": 75.91041564941406,
+        "kl": 27.703771591186523
+      }
+    },
+    {
+      "step": 3500,
+      "epoch": 8,
+      "losses": {
+        "total": 107.08871459960938,
+        "reconstruction": 78.88211059570312,
+        "kl": 28.20660400390625
+      }
+    },
+    {
+      "step": 3600,
+      "epoch": 8,
+      "losses": {
+        "total": 102.9566879272461,
+        "reconstruction": 75.48089599609375,
+        "kl": 27.47579002380371
+      }
+    },
+    {
+      "step": 3700,
+      "epoch": 8,
+      "losses": {
+        "total": 106.44326782226562,
+        "reconstruction": 79.38768005371094,
+        "kl": 27.055583953857422
+      }
+    },
+    {
+      "step": 3800,
+      "epoch": 9,
+      "losses": {
+        "total": 107.10808563232422,
+        "reconstruction": 80.44061279296875,
+        "kl": 26.667470932006836
+      }
+    },
+    {
+      "step": 3900,
+      "epoch": 9,
+      "losses": {
+        "total": 105.37017822265625,
+        "reconstruction": 78.28591918945312,
+        "kl": 27.084259033203125
+      }
+    },
+    {
+      "step": 4000,
+      "epoch": 9,
+      "losses": {
+        "total": 104.39927673339844,
+        "reconstruction": 76.75473022460938,
+        "kl": 27.644546508789062
+      }
+    },
+    {
+      "step": 4100,
+      "epoch": 9,
+      "losses": {
+        "total": 105.26667785644531,
+        "reconstruction": 77.16548919677734,
+        "kl": 28.101184844970703
+      }
+    },
+    {
+      "step": 4200,
+      "epoch": 9,
+      "losses": {
+        "total": 100.49456787109375,
+        "reconstruction": 73.77482604980469,
+        "kl": 26.719741821289062
+      }
+    },
+    {
+      "step": 4300,
+      "epoch": 10,
+      "losses": {
+        "total": 106.30143737792969,
+        "reconstruction": 78.58995056152344,
+        "kl": 27.711488723754883
+      }
+    },
+    {
+      "step": 4400,
+      "epoch": 10,
+      "losses": {
+        "total": 102.428955078125,
+        "reconstruction": 75.07211303710938,
+        "kl": 27.356843948364258
+      }
+    },
+    {
+      "step": 4500,
+      "epoch": 10,
+      "losses": {
+        "total": 105.13774108886719,
+        "reconstruction": 77.19990539550781,
+        "kl": 27.93783950805664
+      }
+    },
+    {
+      "step": 4600,
+      "epoch": 10,
+      "losses": {
+        "total": 106.95227813720703,
+        "reconstruction": 79.25513458251953,
+        "kl": 27.6971435546875
+      }
+    },
+    {
+      "step": 4700,
+      "epoch": 11,
+      "losses": {
+        "total": 100.63334655761719,
+        "reconstruction": 74.21610260009766,
+        "kl": 26.417247772216797
+      }
+    },
+    {
+      "step": 4800,
+      "epoch": 11,
+      "losses": {
+        "total": 101.90189361572266,
+        "reconstruction": 75.02236938476562,
+        "kl": 26.87952423095703
+      }
+    },
+    {
+      "step": 4900,
+      "epoch": 11,
+      "losses": {
+        "total": 103.92272186279297,
+        "reconstruction": 76.95743560791016,
+        "kl": 26.965288162231445
+      }
+    },
+    {
+      "step": 5000,
+      "epoch": 11,
+      "losses": {
+        "total": 103.7871322631836,
+        "reconstruction": 76.26295471191406,
+        "kl": 27.5241756439209
+      }
+    },
+    {
+      "step": 5100,
+      "epoch": 11,
+      "losses": {
+        "total": 105.58086395263672,
+        "reconstruction": 78.03598022460938,
+        "kl": 27.544883728027344
+      }
+    },
+    {
+      "step": 5200,
+      "epoch": 12,
+      "losses": {
+        "total": 102.47314453125,
+        "reconstruction": 75.42469787597656,
+        "kl": 27.048442840576172
+      }
+    },
+    {
+      "step": 5300,
+      "epoch": 12,
+      "losses": {
+        "total": 101.82351684570312,
+        "reconstruction": 74.11540985107422,
+        "kl": 27.708110809326172
+      }
+    },
+    {
+      "step": 5400,
+      "epoch": 12,
+      "losses": {
+        "total": 105.82806396484375,
+        "reconstruction": 78.19479370117188,
+        "kl": 27.633272171020508
+      }
+    },
+    {
+      "step": 5500,
+      "epoch": 12,
+      "losses": {
+        "total": 105.50919342041016,
+        "reconstruction": 78.73526000976562,
+        "kl": 26.7739315032959
+      }
+    },
+    {
+      "step": 5600,
+      "epoch": 12,
+      "losses": {
+        "total": 105.55583190917969,
+        "reconstruction": 77.29508972167969,
+        "kl": 28.260738372802734
+      }
+    },
+    {
+      "step": 5700,
+      "epoch": 13,
+      "losses": {
+        "total": 103.82868957519531,
+        "reconstruction": 75.40338134765625,
+        "kl": 28.425304412841797
+      }
+    },
+    {
+      "step": 5800,
+      "epoch": 13,
+      "losses": {
+        "total": 107.68374633789062,
+        "reconstruction": 80.35008239746094,
+        "kl": 27.333663940429688
+      }
+    },
+    {
+      "step": 5900,
+      "epoch": 13,
+      "losses": {
+        "total": 101.228515625,
+        "reconstruction": 74.40203857421875,
+        "kl": 26.82647705078125
+      }
+    },
+    {
+      "step": 6000,
+      "epoch": 13,
+      "losses": {
+        "total": 99.6858901977539,
+        "reconstruction": 72.4044189453125,
+        "kl": 27.281471252441406
+      }
+    },
+    {
+      "step": 6100,
+      "epoch": 14,
+      "losses": {
+        "total": 100.1383056640625,
+        "reconstruction": 73.86300659179688,
+        "kl": 26.275299072265625
+      }
+    },
+    {
+      "step": 6200,
+      "epoch": 14,
+      "losses": {
+        "total": 102.63226318359375,
+        "reconstruction": 75.60472869873047,
+        "kl": 27.027538299560547
+      }
+    },
+    {
+      "step": 6300,
+      "epoch": 14,
+      "losses": {
+        "total": 101.85814666748047,
+        "reconstruction": 75.33308410644531,
+        "kl": 26.525062561035156
+      }
+    },
+    {
+      "step": 6400,
+      "epoch": 14,
+      "losses": {
+        "total": 103.25094604492188,
+        "reconstruction": 75.2761459350586,
+        "kl": 27.974803924560547
+      }
+    },
+    {
+      "step": 6500,
+      "epoch": 14,
+      "losses": {
+        "total": 105.12220764160156,
+        "reconstruction": 77.83126831054688,
+        "kl": 27.290943145751953
+      }
+    },
+    {
+      "step": 6600,
+      "epoch": 15,
+      "losses": {
+        "total": 104.58736419677734,
+        "reconstruction": 77.80770874023438,
+        "kl": 26.779653549194336
+      }
+    },
+    {
+      "step": 6700,
+      "epoch": 15,
+      "losses": {
+        "total": 104.146484375,
+        "reconstruction": 76.15657806396484,
+        "kl": 27.989906311035156
+      }
+    },
+    {
+      "step": 6800,
+      "epoch": 15,
+      "losses": {
+        "total": 102.25162506103516,
+        "reconstruction": 75.70423889160156,
+        "kl": 26.547386169433594
+      }
+    },
+    {
+      "step": 6900,
+      "epoch": 15,
+      "losses": {
+        "total": 103.78736114501953,
+        "reconstruction": 76.40087890625,
+        "kl": 27.38648223876953
+      }
+    },
+    {
+      "step": 7000,
+      "epoch": 15,
+      "losses": {
+        "total": 104.93793487548828,
+        "reconstruction": 77.80192565917969,
+        "kl": 27.136009216308594
+      }
+    },
+    {
+      "step": 7100,
+      "epoch": 16,
+      "losses": {
+        "total": 102.05024719238281,
+        "reconstruction": 75.36345672607422,
+        "kl": 26.68679428100586
+      }
+    },
+    {
+      "step": 7200,
+      "epoch": 16,
+      "losses": {
+        "total": 102.93348693847656,
+        "reconstruction": 75.9880599975586,
+        "kl": 26.945425033569336
+      }
+    },
+    {
+      "step": 7300,
+      "epoch": 16,
+      "losses": {
+        "total": 102.64825439453125,
+        "reconstruction": 75.6171646118164,
+        "kl": 27.031089782714844
+      }
+    },
+    {
+      "step": 7400,
+      "epoch": 16,
+      "losses": {
+        "total": 104.39808654785156,
+        "reconstruction": 76.41305541992188,
+        "kl": 27.985027313232422
+      }
+    },
+    {
+      "step": 7500,
+      "epoch": 16,
+      "losses": {
+        "total": 99.6243896484375,
+        "reconstruction": 73.63548278808594,
+        "kl": 25.98890495300293
+      }
+    },
+    {
+      "step": 7600,
+      "epoch": 17,
+      "losses": {
+        "total": 101.0864028930664,
+        "reconstruction": 74.34912872314453,
+        "kl": 26.737274169921875
+      }
+    },
+    {
+      "step": 7700,
+      "epoch": 17,
+      "losses": {
+        "total": 103.13809204101562,
+        "reconstruction": 75.56907653808594,
+        "kl": 27.569019317626953
+      }
+    },
+    {
+      "step": 7800,
+      "epoch": 17,
+      "losses": {
+        "total": 105.60308074951172,
+        "reconstruction": 77.58016204833984,
+        "kl": 28.022918701171875
+      }
+    },
+    {
+      "step": 7900,
+      "epoch": 17,
+      "losses": {
+        "total": 102.16658020019531,
+        "reconstruction": 74.80570983886719,
+        "kl": 27.36086654663086
+      }
+    },
+    {
+      "step": 8000,
+      "epoch": 18,
+      "losses": {
+        "total": 101.41055297851562,
+        "reconstruction": 74.95234680175781,
+        "kl": 26.45820426940918
+      }
+    },
+    {
+      "step": 8100,
+      "epoch": 18,
+      "losses": {
+        "total": 100.16839599609375,
+        "reconstruction": 73.47720336914062,
+        "kl": 26.691192626953125
+      }
+    },
+    {
+      "step": 8200,
+      "epoch": 18,
+      "losses": {
+        "total": 102.03878784179688,
+        "reconstruction": 74.96775817871094,
+        "kl": 27.071033477783203
+      }
+    },
+    {
+      "step": 8300,
+      "epoch": 18,
+      "losses": {
+        "total": 102.17582702636719,
+        "reconstruction": 73.87030792236328,
+        "kl": 28.305519104003906
+      }
+    },
+    {
+      "step": 8400,
+      "epoch": 18,
+      "losses": {
+        "total": 99.15826416015625,
+        "reconstruction": 73.18172454833984,
+        "kl": 25.976543426513672
+      }
+    },
+    {
+      "step": 8500,
+      "epoch": 19,
+      "losses": {
+        "total": 102.84890747070312,
+        "reconstruction": 74.61422729492188,
+        "kl": 28.234682083129883
+      }
+    },
+    {
+      "step": 8600,
+      "epoch": 19,
+      "losses": {
+        "total": 101.45167541503906,
+        "reconstruction": 75.2895736694336,
+        "kl": 26.162097930908203
+      }
+    },
+    {
+      "step": 8700,
+      "epoch": 19,
+      "losses": {
+        "total": 102.20902252197266,
+        "reconstruction": 75.59970092773438,
+        "kl": 26.60932159423828
+      }
+    },
+    {
+      "step": 8800,
+      "epoch": 19,
+      "losses": {
+        "total": 105.64156341552734,
+        "reconstruction": 77.990478515625,
+        "kl": 27.651084899902344
+      }
+    },
+    {
+      "step": 8900,
+      "epoch": 19,
+      "losses": {
+        "total": 102.42607116699219,
+        "reconstruction": 75.08010864257812,
+        "kl": 27.345958709716797
+      }
+    },
+    {
+      "step": 9000,
+      "epoch": 20,
+      "losses": {
+        "total": 98.78407287597656,
+        "reconstruction": 72.87049865722656,
+        "kl": 25.913570404052734
+      }
+    },
+    {
+      "step": 9100,
+      "epoch": 20,
+      "losses": {
+        "total": 103.17584991455078,
+        "reconstruction": 75.95851135253906,
+        "kl": 27.217336654663086
+      }
+    },
+    {
+      "step": 9200,
+      "epoch": 20,
+      "losses": {
+        "total": 100.47171020507812,
+        "reconstruction": 73.67068481445312,
+        "kl": 26.801029205322266
+      }
+    },
+    {
+      "step": 9300,
+      "epoch": 20,
+      "losses": {
+        "total": 103.33161926269531,
+        "reconstruction": 76.59188842773438,
+        "kl": 26.739730834960938
+      }
+    }
+  ],
+  "final": {
+    "feature_mmd": 0.052679899602821934,
+    "entropy": 2.2620656490325928,
+    "coverage": 10,
+    "digit_counts": [
+      355,
+      251,
+      491,
+      585,
+      513,
+      416,
+      195,
+      437,
+      457,
+      396
+    ],
+    "sample_count": 4096,
+    "training_seconds": 204.2686747930129,
+    "evaluation_seconds": 1.5636665419879137,
+    "generation_batch_size": 128,
+    "generation_batch_ms": 1.2294749991269782,
+    "generation_batch_ms_std": 0.028744084734453564,
+    "generation_repetitions_ms": [
+      1.2240829964866862,
+      1.209290996484924,
+      1.1803749948740005,
+      1.2163339997641742,
+      1.23695900401799,
+      1.2307920042076148,
+      1.215958000102546,
+      1.2687500056927092,
+      1.2314579944359139,
+      1.280749995203223
+    ],
+    "generation_ms_per_image": 0.009605273430679517
+  }
+}

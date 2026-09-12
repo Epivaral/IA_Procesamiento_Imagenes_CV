@@ -1,0 +1,15 @@
+{
+  "seed": 42,
+  "latent_dimensions": [
+    2,
+    8,
+    16,
+    64
+  ],
+  "beta": 1.0,
+  "epochs": 8,
+  "batch_size": 256,
+  "learning_rate": 0.001,
+  "active_kl_threshold": 0.01,
+  "device": "cpu"
+}

@@ -1,0 +1,411 @@
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage[margin=0.85in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{booktabs,tabularx,array}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{float}
+
+\definecolor{navy}{HTML}{17324D}
+\definecolor{teal}{HTML}{147D7E}
+\definecolor{gold}{HTML}{D49A2A}
+\definecolor{lightgold}{HTML}{FFF7E6}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=navy,
+  urlcolor=teal,
+  pdftitle={Informe del experimento de dimensión latente de un VAE}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Experimento de dimensión latente de un VAE}
+\rhead{Procesamiento de Imágenes y Visión por Computadora}
+\cfoot{\thepage}
+\setlength{\headheight}{14pt}
+
+\graphicspath{{outputs/latent_dimension_experiment/}}
+
+\newcommand{\studentname}{Eduardo Pivaral Leal}
+\newcommand{\studentid}{20032276}
+\newcommand{\coursesection}{A?}
+\newcommand{\submissiondate}{\today}
+
+\newtcolorbox{responsebox}[1][]{
+  colback=white,
+  colframe=teal!70!black,
+  boxrule=0.8pt,
+  arc=2pt,
+  title=Respuesta,
+  fonttitle=\bfseries,
+  breakable,
+  #1
+}
+
+\newtcolorbox{evidencebox}[1][]{
+  colback=lightgold,
+  colframe=gold!80!black,
+  boxrule=0.8pt,
+  arc=2pt,
+  title=Evidencia que debe incluir,
+  fonttitle=\bfseries,
+  breakable,
+  #1
+}
+
+\newcommand{\answerarea}[1][2.1cm]{%
+\begin{responsebox}
+\textit{Escriba aquí su respuesta.}
+\vspace{#1}
+\end{responsebox}
+}
+
+\newcommand{\experimentfigure}[3]{%
+\begin{figure}[H]
+\centering
+\IfFileExists{outputs/latent_dimension_experiment/#1}{%
+  \includegraphics[width=#2\textwidth]{#1}%
+}{%
+  \fbox{\parbox[c][5.0cm][c]{0.88\textwidth}{\centering
+  Ejecute el notebook para generar \texttt{\detokenize{#1}}.}}%
+}
+\caption{#3}
+\end{figure}
+}
+
+\title{\textbf{Informe de laboratorio: selección de la dimensión latente de un autoencoder variacional}}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{0.92\textwidth}{@{}>{\bfseries}lX>{\bfseries}lX@{}}
+Nombre: & \studentname & Carné: & \studentid \\
+Sección: & \coursesection & Fecha de entrega: & \submissiondate \\
+\end{tabularx}
+\end{center}
+
+\section{Objetivo del laboratorio}
+
+Se desea seleccionar un autoencoder variacional capaz de reconstruir dígitos
+reconocibles, generar muestras plausibles a partir de la distribución normal
+estándar, producir interpolaciones graduales y mantener una representación
+compacta. Se comparan las dimensiones latentes
+\[
+d_z\in\{2,8,16,64\}.
+\]
+La recomendación final debe apoyarse en evidencia cuantitativa y cualitativa.
+Ninguna métrica individual es suficiente para decidir.
+
+\section{Hipótesis iniciales}
+
+Complete esta sección antes de examinar los resultados.
+
+\subsection*{Pregunta 1}
+¿Qué dimensión latente espera que produzca la menor pérdida de reconstrucción?
+Explique la relación esperada entre capacidad latente y reconstrucción.
+\begin{responsebox}
+Se esperaria que dz =64 tenga la menor pérdida de reconstruccion porque un espacio latente de mayor dimension tiene mayor capacidad para conservar informacion de la entrada. 
+\end{responsebox}
+
+
+\subsection*{Pregunta 2}
+¿Qué dimensión espera que produzca las muestras más plausibles para
+$\mathbf z\sim\mathcal N(0,I)$? Explique por qué la calidad de muestreo puede no
+seguir el mismo comportamiento que la reconstrucción.
+\begin{responsebox}
+Se espera que una dimension intermedia, como dz = 16, produzca las muestras mas realistas. Una dimension mayor puede mejorar la reconstruccion, pero no necesariamente el muestreo, porque el espacio latente puede quedar menos organizado.
+\end{responsebox}
+
+\subsection*{Pregunta 3}
+Prediga si todas las dimensiones disponibles estarán activas en el modelo con
+$d_z=64$. ¿Qué significa que una dimensión se encuentre inactiva?
+\begin{responsebox}
+No, probablemente no todas las 64 dimensiones esten activas. Una dimension inactiva significa que el modelo practicamente no la usa para guardar informacion de la imagen, por lo que el decodificador la ignora.
+\end{responsebox}
+
+\subsection*{Pregunta 4}
+Escriba una recomendación inicial. Indique qué evidencia podría hacerle cambiar
+esa recomendación.
+\begin{responsebox}
+Recomendaria (dz = 16), porque ofrece un buen balance entre reconstruccion, generacion y costo. Cambiaria la recomendacion si otra dimension logra resultados similares o mejores.
+\end{responsebox}
+
+\section{Integridad experimental}
+
+\subsection*{Pregunta 5}
+Registre la configuración y explique por qué deben mantenerse constantes todos
+los parámetros distintos de la dimensión latente.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Configuración & Valor \\
+\midrule
+Conjunto de datos & MNIST \\
+Dimensiones latentes & $2,8,16,64$ \\
+$\beta$ & 1 \\
+Épocas & 8 \\
+Tamaño de lote & 256 \\
+Tasa de aprendizaje & 0.001 \\
+Semilla aleatoria & 42 \\
+Umbral de actividad & 0.01 \\
+Dispositivo utilizado & CPU \\
+\bottomrule
+\end{tabular}
+\end{center}
+\begin{responsebox}
+Se mantienen todos los parametros iguales y solo cambia la dimension latente. Esto permite comparar los modelos de forma justa y asegurar que las diferencias en los resultados se deben a la dimension latente y no a otros cambios durante la corrida.
+\end{responsebox}
+
+\section{Resultados cuantitativos}
+
+\IfFileExists{outputs/latent_dimension_experiment/summary_table.tex}{%
+\begin{table}[H]
+\centering
+\resizebox{\textwidth}{!}{\input{outputs/latent_dimension_experiment/summary_table.tex}}
+\caption{Comparación final de las dimensiones latentes candidatas.}
+\end{table}
+}{%
+\begin{center}
+\fbox{\parbox[c][3.2cm][c]{0.88\textwidth}{\centering
+Ejecute el notebook para generar \texttt{summary\_table.tex}.}}
+\end{center}
+}
+
+\subsection*{Pregunta 6}
+Ordene los cuatro modelos según su pérdida de reconstrucción en prueba. ¿Las
+mejoras entre dimensiones consecutivas son sustanciales o marginales? Incluya
+los valores medidos.
+\begin{responsebox}
+El orden es: $d_z=2$ (153.772), $d_z=8$ (99.339), $d_z=16$ (80.834) y $d_z=64$ (75.783). Las mejoras son grandes hasta $d_z=16$, pero de 16 a 64 la mejora es pequeña, por lo que aumentar tanto la dimension ya no aporta mucho.
+\end{responsebox}
+
+\subsection*{Pregunta 7}
+¿Cómo cambian la divergencia KL total, el número de dimensiones activas y la
+fracción activa al aumentar $d_z$? Explique qué revela cada medida sobre la
+capacidad latente efectiva.
+\begin{responsebox}
+El KL total aumenta con $d_z$ (5.570, 16.178, 24.779 y 29.070), pero cada vez menos. Las dimensiones activas aumentan de 2 a 8, 16 y 42. Hasta $d_z=16$ se usa el 100\% de las dimensiones, pero con $d_z=64$ solo se usa el 65.6\%.
+\end{responsebox}
+
+\subsection*{Pregunta 8}
+Compare el número de parámetros y el tiempo de entrenamiento. ¿Aumentar $d_z$
+modifica sustancialmente el tamaño total y el costo computacional del modelo?
+\begin{responsebox}
+Los parametros aumentan de 88,645 con $d_z=2$ a 672,065 con $d_z=64$. El tiempo tambien aumenta de 284.9 s a 824.9 s. Por lo tanto, aumentar $d_z$ incrementa bastante el tamano y costo del modelo, pero la mejora en reconstruccion no aumenta igualmente.
+\end{responsebox}
+
+\section{Comportamiento durante el entrenamiento}
+
+\experimentfigure{training_curves.png}{0.98}{Comportamiento de entrenamiento y prueba para cada dimensión latente.}
+
+\subsection*{Pregunta 9}
+¿Todos los modelos alcanzaron una región razonablemente estable en la última
+época? Identifique cualquier comparación afectada por convergencia incompleta.
+\begin{responsebox}
+Los cuatro modelos se estabilizan bastante hacia la epoca 8. Los modelos con $d_z=8$, 16 y 64 parecen haber convergido bien. El modelo con $d_z=2$ todavia muestra una menor mejora, por lo que podria obtener mejores resultados con mas epocas de entrenamiento.
+\end{responsebox}
+
+\subsection*{Pregunta 10}
+Describa la relación entre la pérdida de reconstrucción, la divergencia KL y el
+ELBO negativo. ¿Qué término explica las principales diferencias entre modelos?
+\begin{responsebox}
+El ELBO negativo combina la perdida de reconstruccion y el KL. Al aumentar $d_z$, la reconstruccion mejora y su perdida baja, mientras que el KL aumenta. La reconstruccion es la que explica la mayor parte de las diferencias entre los modelos, ya que cambia mas que el KL.
+\end{responsebox}
+
+\section{Análisis de reconstrucción}
+
+\experimentfigure{reconstructions.png}{0.98}{Reconstrucciones de las mismas imágenes de prueba mediante las medias posteriores.}
+
+\subsection*{Pregunta 11}
+Identifique al menos dos imágenes en las que aumentar $d_z$ produzca una mejora
+visual significativa. Describa cambios en trazos, forma, ambigüedad o detalles.
+\begin{responsebox}
+Los digitos 9 y 4 muestran mejoras claras al aumentar $d_z$. Con $d_z=2$ se ven borrosos y poco definidos, mientras que con $d_z=16$ y $d_z=64$ los trazos son mas claros y la forma del digito se reconoce mejor. con $d_z=16$ se ven bastante bien claros, excepto el numero que creo que es 5 u 8 mal hecho.
+\end{responsebox}
+
+\subsection*{Pregunta 12}
+¿A partir de qué dimensión las dimensiones adicionales muestran rendimientos
+decrecientes? Utilice evidencia visual y la pérdida de reconstrucción.
+\begin{responsebox}
+Los rendimientos decrecientes aparecen a partir de $d_z=16$. De $d_z=16$ a $d_z=64$ la perdida solo mejora de 80.83 a 75.78, cerca de un 6\%. Visualmente, ambos modelos producen reconstrucciones muy parecidas, por lo que aumentar mas la dimension aporta poca mejora.
+\end{responsebox}
+
+\section{Análisis de muestras del prior}
+
+\experimentfigure{prior_samples.png}{0.98}{Muestras generadas a partir de $\mathbf z\sim\mathcal N(0,I)$.}
+
+\subsection*{Pregunta 13}
+Compare el realismo y la diversidad de las muestras. ¿Qué modelo produce la
+mayor proporción de dígitos reconocibles? ¿Cuál muestra mayor variedad visible?
+\begin{responsebox}
+Los modelos con $d_z=8$ y $d_z=16$ producen la mayor cantidad de digitos reconocibles y con buena calidad. El modelo con $d_z=64$ muestra mayor variedad, pero tambien genera algunos digitos mas feos o irreconocibles. En general, $d_z=16$ ofrece el mejor resultado costo/claridad.
+\end{responsebox}
+\subsection*{Pregunta 14}
+¿El modelo con la mejor reconstrucción también produce las mejores muestras del
+prior? Explique por qué ambos resultados pueden diferir en un VAE.
+\begin{evidencebox}
+Considere el término de reconstrucción y la necesidad de que los posteriores
+codificados sean compatibles con el prior utilizado para generar.
+\end{evidencebox}
+\begin{responsebox}
+No necesariamente. $d_z=64$ tiene la mejor reconstruccion (75.78), pero $d_z=8$ y $d_z=16$ producen muestras igual o mas reconocibles. Esto ocurre porque reconstruir bien una imagen no significa que el espacio latente este bien organizado para generar nuevas muestras desde el prior $N(0,I)$.
+\end{responsebox}
+
+\section{Análisis de interpolación}
+
+\experimentfigure{interpolations.png}{0.98}{Interpolación lineal entre las medias posteriores del par seleccionado.}
+
+\subsection*{Pregunta 15}
+¿Qué modelo produce la transición más gradual y plausible? Describa dónde cambia
+la identidad y si los trazos intermedios permanecen coherentes.
+\begin{responsebox}
+El modelo con $d_z=16$ produce la transicion mas gradual y clara. El digito 3 se mantiene reconocible hasta cerca de $t=0.5$ y luego cambia poco a poco hasta formar un 8. Los trazos intermedios se mantienen bastante coherentes durante la transicion.
+\end{responsebox}
+
+\subsection*{Pregunta 16}
+¿Una interpolación suave demuestra que cada dimensión latente tiene un significado
+interpretable? Explique la limitación de esa conclusión.
+\begin{responsebox}
+No. Una interpolacion suave solo indica que el modelo puede pasar gradualmente entre dos puntos del espacio latente. No significa que cada dimension tenga un significado especifico, ya que una dimension puede representar varios atributos al mismo tiempo.
+\end{responsebox}
+\section{Organización del espacio latente}
+
+\experimentfigure{latent_space.png}{0.86}{Medias posteriores: representación directa para $d_z=2$ y PCA para espacios mayores.}
+
+\subsection*{Pregunta 17}
+¿Qué clases forman regiones distinguibles? Identifique clases que se superponen
+y explique si su similitud visual puede justificarlo.
+\begin{responsebox}
+Las clases 0, 1 y 7 forman regiones bastante distinguibles. En cambio, 3, 4, 5, 6, 8 y 9 se superponen mas. Esto es razonable porque varios de estos digitos tienen trazos y formas similares, especialmente en un espacio de solo $d_z=2$.
+\end{responsebox}
+
+\subsection*{Pregunta 18}
+¿Por qué la gráfica directa de $d_z=2$ debe interpretarse de manera diferente a
+las proyecciones bidimensionales obtenidas mediante PCA?
+\begin{responsebox}
+Con $d_z=2$ se muestra directamente todo el espacio latente, sin perder informacion. En dimensiones mayores se usa PCA para reducirlas a 2 dimensiones, por lo que se pierde parte de la informacion. Por eso, dos clases que parecen mezcladas en PCA pueden estar separadas en el espacio latente original.
+\end{responsebox}
+
+\section{Análisis de dimensiones activas}
+
+\experimentfigure{active_dimensions.png}{0.88}{Contribución KL promedio de cada dimensión; la línea discontinua indica el umbral de actividad.}
+
+\subsection*{Pregunta 19}
+¿Cada modelo utiliza todas las dimensiones disponibles? Compare el número y la
+proporción de dimensiones activas.
+\begin{responsebox}
+No. Los modelos con $d_z=2$, $d_z=8$ y $d_z=16$ usan el 100\% de sus dimensiones. En cambio, $d_z=64$ solo usa 65.6\%. Esto indica que el modelo de 64 tiene mas capacidad de la que realmente necesita.
+\end{responsebox}
+
+\subsection*{Pregunta 20}
+Si el modelo de 64 dimensiones deja muchas dimensiones inactivas, ¿qué implica
+para su capacidad nominal y efectiva? ¿Debe considerarse automáticamente un
+fracaso de entrenamiento?
+\begin{responsebox}
+No significa que el entrenamiento haya fallado, sino que el modelo no necesita usar toda la capacidad disponible. Seria un fallo si se determina que el costo o el tiempo es demasiado alto para el ejercicio que se use, pero en este lab no es problema.
+\end{responsebox}
+
+\section{Recomendación final}
+
+\subsection*{Pregunta 21: dimensión seleccionada}
+\begin{center}
+\Large Recomiendo $d_z=\boxed{16}$ para el escenario planteado.
+\end{center}
+
+\subsection*{Pregunta 22: justificación basada en evidencia}
+Defienda su decisión utilizando:
+\begin{itemize}[leftmargin=*]
+  \item al menos tres valores cuantitativos;
+  \item evidencia de reconstrucción;
+  \item realismo y diversidad de las muestras del prior;
+  \item comportamiento de las interpolaciones;
+  \item dimensiones latentes activas; y
+  \item compacidad o costo computacional.
+\end{itemize}
+\begin{responsebox}
+$d_z=16$ ofrece el mejor balance entre calidad y costo. Logra una reconstruccion de 80.83, cercana a 75.78 de $d_z=64$, pero usa muchos menos parametros (220,385 vs. 672,065) y menos de la mitad del tiempo de entrenamiento (399.1 s vs. 824.9 s). Ademas, genera buenos digitos, interpolaciones coherentes y utiliza el 100\% de sus dimensiones. Por eso, aumentar a $d_z=64$ agrega mucho costo para una mejora pequena.
+\end{responsebox}
+
+\subsection*{Pregunta 23: debilidad del modelo seleccionado}
+Identifique la principal debilidad del modelo recomendado. Explique por qué la
+recomendación sigue siendo razonable.
+\begin{responsebox}
+La principal debilidad de $d_z=16$ es que su reconstruccion (80.83) es un poco peor que la de $d_z=64$ (75.78), por lo que puede perder algunos detalles finos. Aun asi, la diferencia es menor frente al ahorro en parametros y tiempo de entrenamiento.
+\end{responsebox}
+
+\subsection*{Pregunta 24: escenario alternativo}
+Describa un uso realista en el que otra dimensión sería preferible. Seleccione
+la dimensión alternativa y justifique su elección.
+\begin{responsebox}
+En un sistema donde la calidad de reconstruccion sea la prioridad, usaria $d_z=64$, ya que tiene la menor perdida de reconstruccion (75.78). Aunque requiere mas recursos, el costo adicional es aceptable si no existen restricciones de tiempo o hardware.
+\end{responsebox}
+
+\section{Limitaciones y experimentos posteriores}
+
+\subsection*{Pregunta 25}
+Identifique al menos tres limitaciones del experimento. Considere duración del
+entrenamiento, variación aleatoria, subjetividad visual, complejidad de MNIST,
+arquitectura y umbral de actividad.
+\begin{responsebox}
+\begin{enumerate}
+    \item Solo se probaron cuatro dimensiones latentes ($2, 8, 16, 64$). Probar valores como 24 o 32 podria encontrar un mejor punto entre calidad y costo.
+
+    \item Se utilizo una sola arquitectura de VAE. Una arquitectura diferente podria cambiar el rendimiento y hacer que otra dimension latente sea mas conveniente.
+
+    \item Solo se utilizo $\beta=1$. Cambiar este valor puede modificar el balance entre reconstruccion y regularizacion KL, y por lo tanto cambiar cual dimension latente funciona mejor.
+\end{enumerate}
+\end{responsebox}
+
+\subsection*{Pregunta 26}
+Proponga un experimento posterior que fortalezca la recomendación. Indique la
+variable que cambiaría, las cantidades que mediría y qué resultado apoyaría o
+contradiría su decisión.
+\begin{responsebox}
+Probaria nuevas dimensiones latentes, por ejemplo $d_z=12$, $24$ y $32$, manteniendo iguales los demas parametros. Mediria la perdida de reconstruccion, el ELBO, el tiempo de entrenamiento y la cantidad de dimensiones activas. Si una dimension intermedia como $d_z=24$ logra una calidad similar a $d_z=64$ con menor costo, cambiaria la recomendacion. Si $d_z=16$ sigue siendo el mejor balance entre calidad y eficiencia, mantendria la decision actual.
+\end{responsebox}
+
+\section{Conclusión}
+
+Escriba una conclusión de 150--250 palabras. Indique el modelo seleccionado,
+resuma la evidencia decisiva y describa el principal compromiso observado.
+\begin{responsebox}
+
+
+Los resultados muestran que aumentar la dimension latente mejora la reconstruccion, pero el beneficio se reduce conforme aumenta $d_z$. El cambio mas importante se observa en las dimensiones pequenas, mientras que pasar de $d_z=16$ a $d_z=64$ reduce la perdida de reconstruccion solamente de 80.83 a 75.78.
+
+Existe entonces un compromiso entre aprovechar una mayor capacidad y mantener un modelo eficiente. Aunque $d_z=64$ consigue la menor perdida, requiere 672,065 parametros y 824.94 segundos de entrenamiento. Ademas, solo 42 de sus 64 dimensiones permanecen activas. En comparacion, $d_z=16$ utiliza sus 16 dimensiones, necesita 220,385 parametros y completa el entrenamiento en 399.1 segundos.
+
+La evaluacion visual tambien favorece a $d_z=16$: las reconstrucciones conservan bien la forma de los digitos, las muestras generadas son reconocibles y las interpolaciones presentan cambios graduales y coherentes.
+
+Por lo tanto, para este experimento seleccionaria $d_z=16$. Los resultados sugieren que esta dimension ya proporciona suficiente capacidad para representar MNIST, mientras que agregar muchas mas dimensiones aumenta considerablemente el costo del modelo sin producir una mejora equivalente en los resultados.
+
+\end{responsebox}
+
+\section*{Lista de verificación}
+\begin{itemize}[label=$\boxed{\times}$,leftmargin=*]
+  \item Se respondieron las 26 preguntas. 
+  \item La recomendación final selecciona una dimensión latente.
+  \item Las afirmaciones cuantitativas incluyen valores medidos.
+  \item Las afirmaciones cualitativas hacen referencia a figuras o ejemplos.
+  \item Se diferencia la gráfica directa de las proyecciones mediante PCA.
+  \item Se analiza una limitación y un escenario alternativo.
+  \item El informe completo compila sin errores.
+\end{itemize}
+
+\end{document}

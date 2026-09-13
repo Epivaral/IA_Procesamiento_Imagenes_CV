@@ -1,0 +1,23 @@
+{
+  "seed": 42,
+  "latent_dim": 32,
+  "diversity_weights": [
+    0.0,
+    0.1,
+    0.5,
+    1.0
+  ],
+  "batch_size": 256,
+  "learning_rate": 0.0002,
+  "classifier_epochs": 10,
+  "pretrain_epochs": 16,
+  "collapse_epochs": 8,
+  "recovery_epochs": 5,
+  "collapse_digits": [
+    1,
+    7
+  ],
+  "mode_frequency_threshold": 0.01,
+  "evaluation_samples": 2500,
+  "device": "cpu"
+}

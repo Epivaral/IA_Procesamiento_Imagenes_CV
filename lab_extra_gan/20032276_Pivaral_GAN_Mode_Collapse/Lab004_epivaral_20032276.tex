@@ -1,0 +1,250 @@
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{tcolorbox}
+\newenvironment{responsebox}{\begin{tcolorbox}[colframe=black!50]}{\end{tcolorbox}}
+
+
+\usepackage[hidelinks]{hyperref}
+\usepackage[strings]{underscore}
+
+\graphicspath{{outputs/gan_mode_collapse/}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.6em}
+\setlist[enumerate]{leftmargin=*,itemsep=0.8em}
+
+\newcommand{\answerbox}[1]{%
+  \par\noindent\textcolor{gray}{\rule{\linewidth}{0.4pt}}%
+  \vspace{#1}\par\noindent\textcolor{gray}{\rule{\linewidth}{0.4pt}}%
+}
+
+\newcommand{\resultfigure}[2]{%
+  \begin{figure}[H]
+    \centering
+    \IfFileExists{outputs/gan_mode_collapse/#1}{%
+      \includegraphics[width=0.96\linewidth,height=0.55\textheight,keepaspectratio]{#1}%
+    }{%
+      \fbox{\parbox[c][4cm][c]{0.88\linewidth}{\centering
+      Ejecute el notebook para generar \texttt{\detokenize{#1}}.}}%
+    }
+    \caption{#2}
+  \end{figure}
+}
+
+\title{Informe de laboratorio\\Recuperación del colapso de modos en una GAN}
+\author{Estudiante: Eduardo Pivaral Leal}
+\date{Carné: 200032276 \hfill Fecha: 12-sep-2026}
+
+\begin{document}
+\maketitle
+
+\section{Propósito e hipótesis}
+
+Todos los experimentos de recuperación parten del mismo punto de control con
+colapso de modos. La variable independiente es el peso de la pérdida de
+diversidad $\lambda_{\mathrm{div}}\in\{0,0.1,0.5,1.0\}$. La función objetivo del
+generador es
+\[
+  \mathcal{L}_G
+  =\mathcal{L}_{\mathrm{adv}}
+  +\lambda_{\mathrm{div}}\mathcal{L}_{\mathrm{div}},
+  \qquad
+  \mathcal{L}_{\mathrm{div}}
+  =-\mathbb{E}\!\left[
+    \frac{\lVert G(z_1)-G(z_2)\rVert_1}
+         {\lVert z_1-z_2\rVert_1+\epsilon}
+  \right].
+\]
+
+\begin{enumerate}
+  \item Antes de observar los resultados, ¿qué valor de
+  $\lambda_{\mathrm{div}}$ esperaba que funcionara mejor? Explique el beneficio
+  esperado y un posible riesgo.
+\end{enumerate}
+\begin{responsebox}
+Esperaba que $\lambda_{div}=0.5$ funcionara mejor, ya que es un valor intermedio que podria aumentar la variedad de los digitos sin afectar demasiado su calidad. El riesgo de usar un valor mas alto es que el modelo busque demasiada diversidad y termine generando imagenes deformadas o con ruido.
+\end{responsebox}
+
+\section{Diagnóstico del punto de control colapsado}
+
+\resultfigure{collapsed_samples.png}{Muestras del punto de control común con colapso de modos.}
+\resultfigure{collapsed_class_distribution.png}{Distribución de dígitos predicha por el clasificador en el punto colapsado.}
+
+\begin{enumerate}[resume]
+  \item ¿Qué evidencia visual sugiere colapso de modos? Distinga entre clases
+  ausentes y apariencias repetidas dentro de una clase representada.
+\end{enumerate}
+\begin{responsebox}
+El colapso es bastante claro porque las muestras son muy parecidas entre si y no se observan digitos reconocibles. En lugar de generar diferentes clases, el modelo repite casi el mismo patron con pequenas variaciones. Aunque el clasificador las identifica principalmente como un 8, visualmente no parecen un 8.
+\end{responsebox}
+
+\begin{enumerate}[resume]
+  \item Utilice el número de modos y la entropía normalizada para describir el
+  colapso entre clases. ¿Qué información aporta cada medida?
+\end{enumerate}
+\begin{responsebox}
+El modelo tiene un mode_count de 1/10 y una entropia normalizada de 0.009, lo que muestra un colapso muy fuerte. El mode_count indica que solo una clase aparece con suficiente frecuencia, mientras que la entropia cercana a 0 muestra que casi todas las muestras se concentran en esa misma clase.
+\end{responsebox}
+
+\begin{enumerate}[resume]
+  \item ¿Las muestras mostradas permiten identificar confiablemente el colapso
+  dentro de cada clase? Explique qué evidencia adicional se necesita.
+\end{enumerate}
+\begin{responsebox}
+No de forma confiable. Las muestras permiten tener una idea visual, pero como los digitos no son claramente reconocibles, es dificil saber si existe diversidad real dentro de una clase. Aunque within_class_diversity es 9.53, este valor puede representar solamente variaciones del mismo patron de ruido. Para confirmarlo seria necesario revisar mas muestras o compararlas con ejemplos reales de la misma clase.
+\end{responsebox}
+
+\section{Resultados de recuperación}
+
+\IfFileExists{outputs/gan_mode_collapse/summary_table.tex}{%
+  \begin{table}[H]
+    \centering
+    \small
+    \resizebox{\linewidth}{!}{\input{outputs/gan_mode_collapse/summary_table.tex}}
+    \caption{Resultados cuantitativos generados por el notebook.}
+  \end{table}
+}{%
+  \begin{center}
+    \fbox{\parbox[c][2.2cm][c]{0.88\linewidth}{\centering
+    Ejecute el notebook para generar
+    \texttt{outputs/gan\_mode\_collapse/summary\_table.tex}.}}
+  \end{center}
+}
+
+\resultfigure{recovery_samples.png}{Muestras del punto colapsado y de todas las configuraciones de recuperación.}
+\resultfigure{class_distributions.png}{Distribuciones de clases predichas; la línea discontinua indica el umbral de modo.}
+\resultfigure{recovery_metrics.png}{Comparación cuantitativa de las configuraciones de recuperación.}
+
+\begin{enumerate}[resume]
+  \item ¿Qué configuraciones recuperan el mayor número de clases? ¿Un número
+  alto de modos implica necesariamente una distribución equilibrada? Utilice
+  la entropía como evidencia.
+\end{enumerate}
+\begin{responsebox}
+Ninguna configuracion logra recuperar mas de una clase, ya que todas tienen un mode_count de 1. Las entropias tambien son muy bajas lo que confirma que todas las muestras siguen  metidas en una sola clase.
+Tener muchos modos no significa que las clases esten bien balanceadas, porque algunas podrian aparecer mucho mas que otras.
+\end{responsebox}
+
+
+\begin{enumerate}[resume]
+  \item Compare la confianza del clasificador. Identifique cualquier compromiso
+  aparente entre diversidad y calidad.
+\end{enumerate}
+\begin{responsebox}
+La confianza se mantiene bastante alta en todos los experimentos, con valores entre 0.942 y 0.979. Sin embargo, en este caso una confianza alta no significa que el generador este funcionando bien. El clasificador simplemente esta muy seguro de como clasificar imagenes que visualmente siguen siendo poco reconocibles.
+
+Por eso, los resultados no muestran el intercambio esperado entre calidad y diversidad. Probar diferentes valores de $\lambda_{div}$ cambia algunas metricas, pero no resuelve el problema principal: el modelo sigue atrapado generando patrones muy parecidos.
+\end{responsebox}
+
+\begin{enumerate}[resume]
+  \item Compare la diversidad de características con la diversidad dentro de
+  cada clase. ¿Qué configuraciones mejoran ambas medidas y cuáles mejoran
+  principalmente una?
+\end{enumerate}
+\begin{responsebox}
+El mejor resultado aparece con $\lambda_{div}=0.5$, ya que obtiene los valores mas altos tanto en feature_diversity = 16.673 como en within_class_diversity=16.750. Esto indica que la diversidad aumenta de una forma mas completa con esta configuracion.
+
+Con $\lambda_{div}=0.1$ la mejora se nota mas dentro de la clase, llegando a 13.344. En cambio, $\lambda_{div}=1.0$ mantiene una diversidad general alta, pero la diversidad dentro de clase baja a 10.313. Esto sugiere que aumentar demasiado $\lambda_{div}$ agrega diferencias entre las imagenes, pero esas diferencias no necesariamente representan una variedad mas util.
+\end{responsebox}
+
+\begin{enumerate}[resume]
+  \item Examine las muestras. ¿La mayor diversidad representa variaciones
+  significativas o solamente ruido, distorsiones o dígitos ambiguos? Describa
+  dos ejemplos concretos.
+\end{enumerate}
+\begin{responsebox}
+Aunque las metricas muestran mayor diversidad, visualmente esa diferencia parece venir principalmente de cambios en el ruido y no de nuevos digitos o estilos reconocibles.
+
+Por ejemplo, con $\lambda_{div}=0.5$, las columnas 3 y 4 son diferentes entre si, pero ninguna forma claramente un digito. Algo parecido ocurre con $\lambda_{div}=1.0$ en las columnas 8 a 11: cambian la posicion y densidad de las manchas, pero siguen sin representar digitos claros.
+
+Por lo tanto, en este caso tener mas diversidad numerica no significa que el modelo haya aprendido una variedad mas util o significativa.
+\end{responsebox}
+
+\section{Comportamiento durante el entrenamiento}
+
+\resultfigure{recovery_training.png}{Pérdidas del generador y discriminador durante la recuperación.}
+
+\begin{enumerate}[resume]
+  \item ¿Por qué las pérdidas totales del generador para distintos valores de
+  $\lambda_{\mathrm{div}}$ no deben compararse como si midieran exactamente la
+  misma función objetivo?
+\end{enumerate}
+\begin{responsebox}
+Las perdidas totales no se pueden comparar directamente porque al cambiar $\lambda_{div}$ tambien cambia lo que se esta midiendo. Con $\lambda_{div}=0$, la perdida depende solamente de la parte adversarial, mientras que los otros modelos tambien incluyen el efecto de la diversidad.
+Para una comparacion justa entre modelos conviene revisar por separado la perdida adversarial.
+\end{responsebox}
+
+\begin{enumerate}[resume]
+  \item ¿Las curvas de pérdida demuestran por sí solas que se resolvió el
+  colapso de modos? Justifique utilizando los demás resultados.
+\end{enumerate}
+\begin{responsebox}
+Las curvas de perdida por si solas no son suficientes para saber si el modelo se recupero. El discriminador permanece en cero durante las cinco epocas para todas las configuraciones, mientras que la perdida del generador aumenta, pero esto no explica por si mismo que esta ocurriendo con las imagenes generadas.
+
+Las otras metricas dejan el resultado mucho mas claro: todos los modelos mantienen un \texttt{mode\_count} de 1, la entropia sigue cerca de 0 y las muestras no forman digitos reconocibles. Al juntar estas evidencias se puede concluir que ninguna configuracion logro resolver el colapso.
+\end{responsebox}
+
+\section{Decisión y limitaciones}
+
+\begin{enumerate}[resume]
+  \item Seleccione un valor de $\lambda_{\mathrm{div}}$. Defienda la elección
+  con al menos dos resultados cuantitativos y dos observaciones visuales.
+\end{enumerate}
+\begin{responsebox}
+Escogeria $\lambda_{div}=0.5$, aunque ninguna configuracion logro recuperar completamente el modelo. Entre las opciones probadas, esta obtuvo la mayor feature_diversity =16.673 y la mayor within_class_diversity =16.750. Ademas, alcanzo la confianza mas alta del clasificador, con 0.9787.
+
+Visualmente tambien se observa mayor variedad entre las formas generadas que con $\lambda_{div}=0$ y 0.1, y la distribucion de clases presenta practicamente toda la masa concentrada en la clase dominante, sin una presencia visible importante de otras clases.
+
+Aun asi, escoger 0.5 no significa que el problema haya quedado resuelto. El mode_count sigue siendo 1/10 y las imagenes no llegan a convertirse en digitos claramente reconocibles. 
+\end{responsebox}
+
+\begin{enumerate}[resume]
+  \item Si la fidelidad de las imágenes fuera más importante que la cobertura
+  de clases, ¿cambiaría su elección? Justifique.
+\end{enumerate}
+\begin{responsebox}
+Si la prioridad fuera la fidelidad, cambiaria a $\lambda_{div}=0.1$. Al darle menos peso a la diversidad, el modelo se aleja menos de su comportamiento original y existe menor riesgo de agregar variaciones que solo terminen siendo ruido o distorsiones.
+
+De todas formas, la diferencia es limitada porque ninguna configuracion llega a producir digitos claramente reconocibles. Por eso, $\lambda_{div}=0.1$ seria una eleccion mas conservadora para priorizar fidelidad, pero no solucionaria el problema principal del modelo.
+\end{responsebox}
+
+
+\begin{enumerate}[resume]
+  \item Indique una limitación de utilizar un clasificador de MNIST para medir
+  la cobertura de la GAN y una limitación del diseño experimental.
+\end{enumerate}
+\begin{responsebox}
+Limitacion del clasificador: El clasificador siempre intenta asignar una clase, incluso cuando la imagen no parece un digito real. Por eso puede mostrar una confianza cercana a 0.98 frente a patrones de ruido y dar la impresion de que el resultado es mejor de lo que realmente es.
+
+Limitacion del diseno experimental: El experimento no logro producir el colapso esperado hacia los digitos 1 y 7, ya que \texttt{mass on [1,7] = 0.000}. Ademas, el discriminador ya habia llegado a una perdida de 0 durante el preentrenamiento. Por lo tanto, las pruebas comenzaron desde un colapso mas severo de lo planeado.
+\end{responsebox}
+
+\begin{enumerate}[resume]
+  \item Proponga un experimento posterior que fortalezca o cuestione su
+  conclusión. Indique la variable que modificaría y la evidencia que recopilaría.
+\end{enumerate}
+\begin{responsebox}
+Como experimento posterior, probaria cambiar la forma de medir la diversidad en lugar de modificar el entrenamiento. Usaria una metrica basada en similitud entre embeddings de un modelo diferente al clasificador de MNIST, para comprobar si la diversidad observada realmente representa cambios utiles y no solo ruido.
+
+La variable a modificar seria la metrica de evaluacion de diversidad. Compararia los resultados actuales de feature_diversity y within_class\_diversity contra una segunda medida independiente. Si $\lambda_{div}=0.5$ sigue apareciendo como la configuracion mas diversa con ambas formas de evaluacion, la conclusion seria mas solida. Si cambia mucho el resultado, significaria que la recomendacion depende demasiado de la metrica utilizada.
+\end{responsebox}
+
+\section*{Recomendación final}
+
+Valor recomendado: $\lambda_{\mathrm{div}}=0.5$
+
+Conclusión en una oración:
+\begin{responsebox}
+Recomiendo $\lambda_{div}=0.5$ porque fue la configuracion que mostro la mejor respuesta relativa al termino de diversidad sin empeorar otras metricas importantes, aunque el resultado principal del experimento es que ajustar $\lambda_{div}$ por si solo no fue suficiente para sacar al generador del estado de colapso en el que ya se encontraba.
+\end{responsebox}
+
+\end{document}
